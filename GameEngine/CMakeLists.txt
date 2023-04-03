@@ -9,4 +9,6 @@ if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET GameEngine PROPERTY CXX_STANDARD 20)
 endif()
 
-# TODO: Add tests and install targets if needed.
+find_package(Vulkan REQUIRED)
+target_link_libraries(${PROJECT_NAME} Vulkan::Vulkan)
+target_include_directories(${PROJECT_NAME} PUBLIC ${VULKAN_INCLUDE_DIRS})
