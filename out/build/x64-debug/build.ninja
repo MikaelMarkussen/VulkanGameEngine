@@ -63,6 +63,36 @@ build CMakeFiles\rebuild_cache.util: CUSTOM_COMMAND
 
 build rebuild_cache: phony CMakeFiles\rebuild_cache.util
 
+
+#############################################
+# Utility command for list_install_components
+
+build list_install_components: phony
+
+
+#############################################
+# Utility command for install
+
+build CMakeFiles\install.util: CUSTOM_COMMAND all
+  COMMAND = cmd.exe /C "cd /D C:\Prosjekter\Vulkan\VulkanGameEngine\out\build\x64-debug && "C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -P cmake_install.cmake"
+  DESC = Install the project...
+  pool = console
+  restat = 1
+
+build install: phony CMakeFiles\install.util
+
+
+#############################################
+# Utility command for install/local
+
+build CMakeFiles\install\local.util: CUSTOM_COMMAND all
+  COMMAND = cmd.exe /C "cd /D C:\Prosjekter\Vulkan\VulkanGameEngine\out\build\x64-debug && "C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake"
+  DESC = Installing only the local directory...
+  pool = console
+  restat = 1
+
+build install\local: phony CMakeFiles\install\local.util
+
 # =============================================================================
 # Write statements declared in CMakeLists.txt:
 # C:/Prosjekter/Vulkan/VulkanGameEngine/CMakeLists.txt
@@ -75,11 +105,11 @@ build rebuild_cache: phony CMakeFiles\rebuild_cache.util
 #############################################
 # Order-only phony target for GameEngine
 
-build cmake_object_order_depends_target_GameEngine: phony || GameEngine\CMakeFiles\GameEngine.dir
+build cmake_object_order_depends_target_GameEngine: phony || cmake_object_order_depends_target_glfw
 
 build GameEngine\CMakeFiles\GameEngine.dir\GameEngine.cpp.obj: CXX_COMPILER__GameEngine_Debug C$:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\GameEngine.cpp || cmake_object_order_depends_target_GameEngine
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Ob0 /Od /RTC1 -ZI -std:c++20
-  INCLUDES = -external:IC:\VulkanSDK\1.3.224.1\Include -external:W0
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Ob0 /Od /RTC1 -DDEBUG -ZI -std:c++20
+  INCLUDES = -IC:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\Libs\glfw\include -external:IC:\VulkanSDK\1.3.224.1\Include -external:W0
   OBJECT_DIR = GameEngine\CMakeFiles\GameEngine.dir
   OBJECT_FILE_DIR = GameEngine\CMakeFiles\GameEngine.dir
   TARGET_COMPILE_PDB = GameEngine\CMakeFiles\GameEngine.dir\
@@ -93,10 +123,10 @@ build GameEngine\CMakeFiles\GameEngine.dir\GameEngine.cpp.obj: CXX_COMPILER__Gam
 #############################################
 # Link the executable GameEngine\GameEngine.exe
 
-build GameEngine\GameEngine.exe: CXX_EXECUTABLE_LINKER__GameEngine_Debug GameEngine\CMakeFiles\GameEngine.dir\GameEngine.cpp.obj | C$:\VulkanSDK\1.3.224.1\Lib\vulkan-1.lib
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Ob0 /Od /RTC1 -ZI
+build GameEngine\GameEngine.exe: CXX_EXECUTABLE_LINKER__GameEngine_Debug GameEngine\CMakeFiles\GameEngine.dir\GameEngine.cpp.obj | C$:\VulkanSDK\1.3.224.1\Lib\vulkan-1.lib GameEngine\Libs\glfw\src\glfw3.lib || GameEngine\Libs\glfw\src\glfw3.lib
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Ob0 /Od /RTC1 -DDEBUG -ZI
   LINK_FLAGS = /machine:x64 /debug /INCREMENTAL /subsystem:console
-  LINK_LIBRARIES = C:\VulkanSDK\1.3.224.1\Lib\vulkan-1.lib  kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib
+  LINK_LIBRARIES = C:\VulkanSDK\1.3.224.1\Lib\vulkan-1.lib  GameEngine\Libs\glfw\src\glfw3.lib  kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib
   OBJECT_DIR = GameEngine\CMakeFiles\GameEngine.dir
   POST_BUILD = cd .
   PRE_LINK = cd .
@@ -128,12 +158,409 @@ build GameEngine\CMakeFiles\rebuild_cache.util: CUSTOM_COMMAND
 
 build GameEngine\rebuild_cache: phony GameEngine\CMakeFiles\rebuild_cache.util
 
+
+#############################################
+# Utility command for list_install_components
+
+build GameEngine\list_install_components: phony
+
+
+#############################################
+# Utility command for install
+
+build GameEngine\CMakeFiles\install.util: CUSTOM_COMMAND GameEngine\all
+  COMMAND = cmd.exe /C "cd /D C:\Prosjekter\Vulkan\VulkanGameEngine\out\build\x64-debug\GameEngine && "C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -P cmake_install.cmake"
+  DESC = Install the project...
+  pool = console
+  restat = 1
+
+build GameEngine\install: phony GameEngine\CMakeFiles\install.util
+
+
+#############################################
+# Utility command for install/local
+
+build GameEngine\CMakeFiles\install\local.util: CUSTOM_COMMAND GameEngine\all
+  COMMAND = cmd.exe /C "cd /D C:\Prosjekter\Vulkan\VulkanGameEngine\out\build\x64-debug\GameEngine && "C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake"
+  DESC = Installing only the local directory...
+  pool = console
+  restat = 1
+
+build GameEngine\install\local: phony GameEngine\CMakeFiles\install\local.util
+
+# =============================================================================
+# Write statements declared in CMakeLists.txt:
+# C:/Prosjekter/Vulkan/VulkanGameEngine/GameEngine/CMakeLists.txt
+# =============================================================================
+
+
+#############################################
+# Utility command for uninstall
+
+build GameEngine\Libs\glfw\uninstall: phony GameEngine\Libs\glfw\CMakeFiles\uninstall
+
+
+#############################################
+# Utility command for edit_cache
+
+build GameEngine\Libs\glfw\CMakeFiles\edit_cache.util: CUSTOM_COMMAND
+  COMMAND = cmd.exe /C "cd /D C:\Prosjekter\Vulkan\VulkanGameEngine\out\build\x64-debug\GameEngine\Libs\glfw && "C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -E echo "No interactive CMake dialog available.""
+  DESC = No interactive CMake dialog available...
+  restat = 1
+
+build GameEngine\Libs\glfw\edit_cache: phony GameEngine\Libs\glfw\CMakeFiles\edit_cache.util
+
+
+#############################################
+# Utility command for rebuild_cache
+
+build GameEngine\Libs\glfw\CMakeFiles\rebuild_cache.util: CUSTOM_COMMAND
+  COMMAND = cmd.exe /C "cd /D C:\Prosjekter\Vulkan\VulkanGameEngine\out\build\x64-debug\GameEngine\Libs\glfw && "C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" --regenerate-during-build -SC:\Prosjekter\Vulkan\VulkanGameEngine -BC:\Prosjekter\Vulkan\VulkanGameEngine\out\build\x64-debug"
+  DESC = Running CMake to regenerate build system...
+  pool = console
+  restat = 1
+
+build GameEngine\Libs\glfw\rebuild_cache: phony GameEngine\Libs\glfw\CMakeFiles\rebuild_cache.util
+
+
+#############################################
+# Utility command for list_install_components
+
+build GameEngine\Libs\glfw\list_install_components: phony
+
+
+#############################################
+# Utility command for install
+
+build GameEngine\Libs\glfw\CMakeFiles\install.util: CUSTOM_COMMAND GameEngine\Libs\glfw\all
+  COMMAND = cmd.exe /C "cd /D C:\Prosjekter\Vulkan\VulkanGameEngine\out\build\x64-debug\GameEngine\Libs\glfw && "C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -P cmake_install.cmake"
+  DESC = Install the project...
+  pool = console
+  restat = 1
+
+build GameEngine\Libs\glfw\install: phony GameEngine\Libs\glfw\CMakeFiles\install.util
+
+
+#############################################
+# Utility command for install/local
+
+build GameEngine\Libs\glfw\CMakeFiles\install\local.util: CUSTOM_COMMAND GameEngine\Libs\glfw\all
+  COMMAND = cmd.exe /C "cd /D C:\Prosjekter\Vulkan\VulkanGameEngine\out\build\x64-debug\GameEngine\Libs\glfw && "C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake"
+  DESC = Installing only the local directory...
+  pool = console
+  restat = 1
+
+build GameEngine\Libs\glfw\install\local: phony GameEngine\Libs\glfw\CMakeFiles\install\local.util
+
+
+#############################################
+# Custom command for GameEngine\Libs\glfw\CMakeFiles\uninstall
+
+build GameEngine\Libs\glfw\CMakeFiles\uninstall | ${cmake_ninja_workdir}GameEngine\Libs\glfw\CMakeFiles\uninstall: CUSTOM_COMMAND
+  COMMAND = cmd.exe /C "cd /D C:\Prosjekter\Vulkan\VulkanGameEngine\out\build\x64-debug\GameEngine\Libs\glfw && "C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -P C:/Prosjekter/Vulkan/VulkanGameEngine/out/build/x64-debug/GameEngine/Libs/glfw/cmake_uninstall.cmake"
+
+# =============================================================================
+# Write statements declared in CMakeLists.txt:
+# C:/Prosjekter/Vulkan/VulkanGameEngine/GameEngine/Libs/glfw/CMakeLists.txt
+# =============================================================================
+
+# =============================================================================
+# Object build statements for STATIC_LIBRARY target glfw
+
+
+#############################################
+# Order-only phony target for glfw
+
+build cmake_object_order_depends_target_glfw: phony || GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir
+
+build GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir\context.c.obj: C_COMPILER__glfw_Debug C$:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\Libs\glfw\src\context.c || cmake_object_order_depends_target_glfw
+  DEFINES = -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /MDd /Ob0 /Od /RTC1 -ZI /W3
+  INCLUDES = -IC:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\Libs\glfw\include -IC:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\Libs\glfw\src -IC:\Prosjekter\Vulkan\VulkanGameEngine\out\build\x64-debug\GameEngine\Libs\glfw\src
+  OBJECT_DIR = GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir
+  OBJECT_FILE_DIR = GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir
+  TARGET_COMPILE_PDB = GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir\glfw.pdb
+  TARGET_PDB = GameEngine\Libs\glfw\src\glfw3.pdb
+
+build GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir\init.c.obj: C_COMPILER__glfw_Debug C$:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\Libs\glfw\src\init.c || cmake_object_order_depends_target_glfw
+  DEFINES = -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /MDd /Ob0 /Od /RTC1 -ZI /W3
+  INCLUDES = -IC:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\Libs\glfw\include -IC:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\Libs\glfw\src -IC:\Prosjekter\Vulkan\VulkanGameEngine\out\build\x64-debug\GameEngine\Libs\glfw\src
+  OBJECT_DIR = GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir
+  OBJECT_FILE_DIR = GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir
+  TARGET_COMPILE_PDB = GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir\glfw.pdb
+  TARGET_PDB = GameEngine\Libs\glfw\src\glfw3.pdb
+
+build GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir\input.c.obj: C_COMPILER__glfw_Debug C$:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\Libs\glfw\src\input.c || cmake_object_order_depends_target_glfw
+  DEFINES = -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /MDd /Ob0 /Od /RTC1 -ZI /W3
+  INCLUDES = -IC:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\Libs\glfw\include -IC:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\Libs\glfw\src -IC:\Prosjekter\Vulkan\VulkanGameEngine\out\build\x64-debug\GameEngine\Libs\glfw\src
+  OBJECT_DIR = GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir
+  OBJECT_FILE_DIR = GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir
+  TARGET_COMPILE_PDB = GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir\glfw.pdb
+  TARGET_PDB = GameEngine\Libs\glfw\src\glfw3.pdb
+
+build GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir\monitor.c.obj: C_COMPILER__glfw_Debug C$:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\Libs\glfw\src\monitor.c || cmake_object_order_depends_target_glfw
+  DEFINES = -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /MDd /Ob0 /Od /RTC1 -ZI /W3
+  INCLUDES = -IC:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\Libs\glfw\include -IC:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\Libs\glfw\src -IC:\Prosjekter\Vulkan\VulkanGameEngine\out\build\x64-debug\GameEngine\Libs\glfw\src
+  OBJECT_DIR = GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir
+  OBJECT_FILE_DIR = GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir
+  TARGET_COMPILE_PDB = GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir\glfw.pdb
+  TARGET_PDB = GameEngine\Libs\glfw\src\glfw3.pdb
+
+build GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir\platform.c.obj: C_COMPILER__glfw_Debug C$:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\Libs\glfw\src\platform.c || cmake_object_order_depends_target_glfw
+  DEFINES = -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /MDd /Ob0 /Od /RTC1 -ZI /W3
+  INCLUDES = -IC:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\Libs\glfw\include -IC:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\Libs\glfw\src -IC:\Prosjekter\Vulkan\VulkanGameEngine\out\build\x64-debug\GameEngine\Libs\glfw\src
+  OBJECT_DIR = GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir
+  OBJECT_FILE_DIR = GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir
+  TARGET_COMPILE_PDB = GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir\glfw.pdb
+  TARGET_PDB = GameEngine\Libs\glfw\src\glfw3.pdb
+
+build GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir\vulkan.c.obj: C_COMPILER__glfw_Debug C$:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\Libs\glfw\src\vulkan.c || cmake_object_order_depends_target_glfw
+  DEFINES = -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /MDd /Ob0 /Od /RTC1 -ZI /W3
+  INCLUDES = -IC:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\Libs\glfw\include -IC:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\Libs\glfw\src -IC:\Prosjekter\Vulkan\VulkanGameEngine\out\build\x64-debug\GameEngine\Libs\glfw\src
+  OBJECT_DIR = GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir
+  OBJECT_FILE_DIR = GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir
+  TARGET_COMPILE_PDB = GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir\glfw.pdb
+  TARGET_PDB = GameEngine\Libs\glfw\src\glfw3.pdb
+
+build GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir\window.c.obj: C_COMPILER__glfw_Debug C$:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\Libs\glfw\src\window.c || cmake_object_order_depends_target_glfw
+  DEFINES = -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /MDd /Ob0 /Od /RTC1 -ZI /W3
+  INCLUDES = -IC:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\Libs\glfw\include -IC:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\Libs\glfw\src -IC:\Prosjekter\Vulkan\VulkanGameEngine\out\build\x64-debug\GameEngine\Libs\glfw\src
+  OBJECT_DIR = GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir
+  OBJECT_FILE_DIR = GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir
+  TARGET_COMPILE_PDB = GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir\glfw.pdb
+  TARGET_PDB = GameEngine\Libs\glfw\src\glfw3.pdb
+
+build GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir\egl_context.c.obj: C_COMPILER__glfw_Debug C$:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\Libs\glfw\src\egl_context.c || cmake_object_order_depends_target_glfw
+  DEFINES = -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /MDd /Ob0 /Od /RTC1 -ZI /W3
+  INCLUDES = -IC:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\Libs\glfw\include -IC:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\Libs\glfw\src -IC:\Prosjekter\Vulkan\VulkanGameEngine\out\build\x64-debug\GameEngine\Libs\glfw\src
+  OBJECT_DIR = GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir
+  OBJECT_FILE_DIR = GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir
+  TARGET_COMPILE_PDB = GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir\glfw.pdb
+  TARGET_PDB = GameEngine\Libs\glfw\src\glfw3.pdb
+
+build GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir\osmesa_context.c.obj: C_COMPILER__glfw_Debug C$:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\Libs\glfw\src\osmesa_context.c || cmake_object_order_depends_target_glfw
+  DEFINES = -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /MDd /Ob0 /Od /RTC1 -ZI /W3
+  INCLUDES = -IC:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\Libs\glfw\include -IC:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\Libs\glfw\src -IC:\Prosjekter\Vulkan\VulkanGameEngine\out\build\x64-debug\GameEngine\Libs\glfw\src
+  OBJECT_DIR = GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir
+  OBJECT_FILE_DIR = GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir
+  TARGET_COMPILE_PDB = GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir\glfw.pdb
+  TARGET_PDB = GameEngine\Libs\glfw\src\glfw3.pdb
+
+build GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir\null_init.c.obj: C_COMPILER__glfw_Debug C$:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\Libs\glfw\src\null_init.c || cmake_object_order_depends_target_glfw
+  DEFINES = -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /MDd /Ob0 /Od /RTC1 -ZI /W3
+  INCLUDES = -IC:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\Libs\glfw\include -IC:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\Libs\glfw\src -IC:\Prosjekter\Vulkan\VulkanGameEngine\out\build\x64-debug\GameEngine\Libs\glfw\src
+  OBJECT_DIR = GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir
+  OBJECT_FILE_DIR = GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir
+  TARGET_COMPILE_PDB = GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir\glfw.pdb
+  TARGET_PDB = GameEngine\Libs\glfw\src\glfw3.pdb
+
+build GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir\null_monitor.c.obj: C_COMPILER__glfw_Debug C$:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\Libs\glfw\src\null_monitor.c || cmake_object_order_depends_target_glfw
+  DEFINES = -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /MDd /Ob0 /Od /RTC1 -ZI /W3
+  INCLUDES = -IC:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\Libs\glfw\include -IC:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\Libs\glfw\src -IC:\Prosjekter\Vulkan\VulkanGameEngine\out\build\x64-debug\GameEngine\Libs\glfw\src
+  OBJECT_DIR = GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir
+  OBJECT_FILE_DIR = GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir
+  TARGET_COMPILE_PDB = GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir\glfw.pdb
+  TARGET_PDB = GameEngine\Libs\glfw\src\glfw3.pdb
+
+build GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir\null_window.c.obj: C_COMPILER__glfw_Debug C$:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\Libs\glfw\src\null_window.c || cmake_object_order_depends_target_glfw
+  DEFINES = -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /MDd /Ob0 /Od /RTC1 -ZI /W3
+  INCLUDES = -IC:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\Libs\glfw\include -IC:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\Libs\glfw\src -IC:\Prosjekter\Vulkan\VulkanGameEngine\out\build\x64-debug\GameEngine\Libs\glfw\src
+  OBJECT_DIR = GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir
+  OBJECT_FILE_DIR = GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir
+  TARGET_COMPILE_PDB = GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir\glfw.pdb
+  TARGET_PDB = GameEngine\Libs\glfw\src\glfw3.pdb
+
+build GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir\null_joystick.c.obj: C_COMPILER__glfw_Debug C$:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\Libs\glfw\src\null_joystick.c || cmake_object_order_depends_target_glfw
+  DEFINES = -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /MDd /Ob0 /Od /RTC1 -ZI /W3
+  INCLUDES = -IC:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\Libs\glfw\include -IC:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\Libs\glfw\src -IC:\Prosjekter\Vulkan\VulkanGameEngine\out\build\x64-debug\GameEngine\Libs\glfw\src
+  OBJECT_DIR = GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir
+  OBJECT_FILE_DIR = GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir
+  TARGET_COMPILE_PDB = GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir\glfw.pdb
+  TARGET_PDB = GameEngine\Libs\glfw\src\glfw3.pdb
+
+build GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir\win32_module.c.obj: C_COMPILER__glfw_Debug C$:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\Libs\glfw\src\win32_module.c || cmake_object_order_depends_target_glfw
+  DEFINES = -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /MDd /Ob0 /Od /RTC1 -ZI /W3
+  INCLUDES = -IC:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\Libs\glfw\include -IC:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\Libs\glfw\src -IC:\Prosjekter\Vulkan\VulkanGameEngine\out\build\x64-debug\GameEngine\Libs\glfw\src
+  OBJECT_DIR = GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir
+  OBJECT_FILE_DIR = GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir
+  TARGET_COMPILE_PDB = GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir\glfw.pdb
+  TARGET_PDB = GameEngine\Libs\glfw\src\glfw3.pdb
+
+build GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir\win32_time.c.obj: C_COMPILER__glfw_Debug C$:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\Libs\glfw\src\win32_time.c || cmake_object_order_depends_target_glfw
+  DEFINES = -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /MDd /Ob0 /Od /RTC1 -ZI /W3
+  INCLUDES = -IC:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\Libs\glfw\include -IC:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\Libs\glfw\src -IC:\Prosjekter\Vulkan\VulkanGameEngine\out\build\x64-debug\GameEngine\Libs\glfw\src
+  OBJECT_DIR = GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir
+  OBJECT_FILE_DIR = GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir
+  TARGET_COMPILE_PDB = GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir\glfw.pdb
+  TARGET_PDB = GameEngine\Libs\glfw\src\glfw3.pdb
+
+build GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir\win32_thread.c.obj: C_COMPILER__glfw_Debug C$:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\Libs\glfw\src\win32_thread.c || cmake_object_order_depends_target_glfw
+  DEFINES = -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /MDd /Ob0 /Od /RTC1 -ZI /W3
+  INCLUDES = -IC:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\Libs\glfw\include -IC:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\Libs\glfw\src -IC:\Prosjekter\Vulkan\VulkanGameEngine\out\build\x64-debug\GameEngine\Libs\glfw\src
+  OBJECT_DIR = GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir
+  OBJECT_FILE_DIR = GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir
+  TARGET_COMPILE_PDB = GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir\glfw.pdb
+  TARGET_PDB = GameEngine\Libs\glfw\src\glfw3.pdb
+
+build GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir\win32_init.c.obj: C_COMPILER__glfw_Debug C$:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\Libs\glfw\src\win32_init.c || cmake_object_order_depends_target_glfw
+  DEFINES = -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /MDd /Ob0 /Od /RTC1 -ZI /W3
+  INCLUDES = -IC:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\Libs\glfw\include -IC:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\Libs\glfw\src -IC:\Prosjekter\Vulkan\VulkanGameEngine\out\build\x64-debug\GameEngine\Libs\glfw\src
+  OBJECT_DIR = GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir
+  OBJECT_FILE_DIR = GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir
+  TARGET_COMPILE_PDB = GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir\glfw.pdb
+  TARGET_PDB = GameEngine\Libs\glfw\src\glfw3.pdb
+
+build GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir\win32_joystick.c.obj: C_COMPILER__glfw_Debug C$:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\Libs\glfw\src\win32_joystick.c || cmake_object_order_depends_target_glfw
+  DEFINES = -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /MDd /Ob0 /Od /RTC1 -ZI /W3
+  INCLUDES = -IC:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\Libs\glfw\include -IC:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\Libs\glfw\src -IC:\Prosjekter\Vulkan\VulkanGameEngine\out\build\x64-debug\GameEngine\Libs\glfw\src
+  OBJECT_DIR = GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir
+  OBJECT_FILE_DIR = GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir
+  TARGET_COMPILE_PDB = GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir\glfw.pdb
+  TARGET_PDB = GameEngine\Libs\glfw\src\glfw3.pdb
+
+build GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir\win32_monitor.c.obj: C_COMPILER__glfw_Debug C$:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\Libs\glfw\src\win32_monitor.c || cmake_object_order_depends_target_glfw
+  DEFINES = -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /MDd /Ob0 /Od /RTC1 -ZI /W3
+  INCLUDES = -IC:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\Libs\glfw\include -IC:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\Libs\glfw\src -IC:\Prosjekter\Vulkan\VulkanGameEngine\out\build\x64-debug\GameEngine\Libs\glfw\src
+  OBJECT_DIR = GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir
+  OBJECT_FILE_DIR = GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir
+  TARGET_COMPILE_PDB = GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir\glfw.pdb
+  TARGET_PDB = GameEngine\Libs\glfw\src\glfw3.pdb
+
+build GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir\win32_window.c.obj: C_COMPILER__glfw_Debug C$:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\Libs\glfw\src\win32_window.c || cmake_object_order_depends_target_glfw
+  DEFINES = -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /MDd /Ob0 /Od /RTC1 -ZI /W3
+  INCLUDES = -IC:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\Libs\glfw\include -IC:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\Libs\glfw\src -IC:\Prosjekter\Vulkan\VulkanGameEngine\out\build\x64-debug\GameEngine\Libs\glfw\src
+  OBJECT_DIR = GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir
+  OBJECT_FILE_DIR = GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir
+  TARGET_COMPILE_PDB = GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir\glfw.pdb
+  TARGET_PDB = GameEngine\Libs\glfw\src\glfw3.pdb
+
+build GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir\wgl_context.c.obj: C_COMPILER__glfw_Debug C$:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\Libs\glfw\src\wgl_context.c || cmake_object_order_depends_target_glfw
+  DEFINES = -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /MDd /Ob0 /Od /RTC1 -ZI /W3
+  INCLUDES = -IC:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\Libs\glfw\include -IC:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\Libs\glfw\src -IC:\Prosjekter\Vulkan\VulkanGameEngine\out\build\x64-debug\GameEngine\Libs\glfw\src
+  OBJECT_DIR = GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir
+  OBJECT_FILE_DIR = GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir
+  TARGET_COMPILE_PDB = GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir\glfw.pdb
+  TARGET_PDB = GameEngine\Libs\glfw\src\glfw3.pdb
+
+
+# =============================================================================
+# Link build statements for STATIC_LIBRARY target glfw
+
+
+#############################################
+# Link the static library GameEngine\Libs\glfw\src\glfw3.lib
+
+build GameEngine\Libs\glfw\src\glfw3.lib: C_STATIC_LIBRARY_LINKER__glfw_Debug GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir\context.c.obj GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir\init.c.obj GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir\input.c.obj GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir\monitor.c.obj GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir\platform.c.obj GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir\vulkan.c.obj GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir\window.c.obj GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir\egl_context.c.obj GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir\osmesa_context.c.obj GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir\null_init.c.obj GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir\null_monitor.c.obj GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir\null_window.c.obj GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir\null_joystick.c.obj GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir\win32_module.c.obj GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir\win32_time.c.obj GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir\win32_thread.c.obj GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir\win32_init.c.obj GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir\win32_joystick.c.obj GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir\win32_monitor.c.obj GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir\win32_window.c.obj GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir\wgl_context.c.obj
+  LANGUAGE_COMPILE_FLAGS = /DWIN32 /D_WINDOWS /W3 /MDd /Ob0 /Od /RTC1 -ZI
+  LINK_FLAGS = /machine:x64
+  OBJECT_DIR = GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir
+  POST_BUILD = cd .
+  PRE_LINK = cd .
+  TARGET_COMPILE_PDB = GameEngine\Libs\glfw\src\CMakeFiles\glfw.dir\glfw.pdb
+  TARGET_FILE = GameEngine\Libs\glfw\src\glfw3.lib
+  TARGET_PDB = GameEngine\Libs\glfw\src\glfw3.pdb
+
+
+#############################################
+# Utility command for update_mappings
+
+build GameEngine\Libs\glfw\src\update_mappings: phony GameEngine\Libs\glfw\src\CMakeFiles\update_mappings
+
+
+#############################################
+# Utility command for edit_cache
+
+build GameEngine\Libs\glfw\src\CMakeFiles\edit_cache.util: CUSTOM_COMMAND
+  COMMAND = cmd.exe /C "cd /D C:\Prosjekter\Vulkan\VulkanGameEngine\out\build\x64-debug\GameEngine\Libs\glfw\src && "C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -E echo "No interactive CMake dialog available.""
+  DESC = No interactive CMake dialog available...
+  restat = 1
+
+build GameEngine\Libs\glfw\src\edit_cache: phony GameEngine\Libs\glfw\src\CMakeFiles\edit_cache.util
+
+
+#############################################
+# Utility command for rebuild_cache
+
+build GameEngine\Libs\glfw\src\CMakeFiles\rebuild_cache.util: CUSTOM_COMMAND
+  COMMAND = cmd.exe /C "cd /D C:\Prosjekter\Vulkan\VulkanGameEngine\out\build\x64-debug\GameEngine\Libs\glfw\src && "C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" --regenerate-during-build -SC:\Prosjekter\Vulkan\VulkanGameEngine -BC:\Prosjekter\Vulkan\VulkanGameEngine\out\build\x64-debug"
+  DESC = Running CMake to regenerate build system...
+  pool = console
+  restat = 1
+
+build GameEngine\Libs\glfw\src\rebuild_cache: phony GameEngine\Libs\glfw\src\CMakeFiles\rebuild_cache.util
+
+
+#############################################
+# Utility command for list_install_components
+
+build GameEngine\Libs\glfw\src\list_install_components: phony
+
+
+#############################################
+# Utility command for install
+
+build GameEngine\Libs\glfw\src\CMakeFiles\install.util: CUSTOM_COMMAND GameEngine\Libs\glfw\src\all
+  COMMAND = cmd.exe /C "cd /D C:\Prosjekter\Vulkan\VulkanGameEngine\out\build\x64-debug\GameEngine\Libs\glfw\src && "C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -P cmake_install.cmake"
+  DESC = Install the project...
+  pool = console
+  restat = 1
+
+build GameEngine\Libs\glfw\src\install: phony GameEngine\Libs\glfw\src\CMakeFiles\install.util
+
+
+#############################################
+# Utility command for install/local
+
+build GameEngine\Libs\glfw\src\CMakeFiles\install\local.util: CUSTOM_COMMAND GameEngine\Libs\glfw\src\all
+  COMMAND = cmd.exe /C "cd /D C:\Prosjekter\Vulkan\VulkanGameEngine\out\build\x64-debug\GameEngine\Libs\glfw\src && "C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake"
+  DESC = Installing only the local directory...
+  pool = console
+  restat = 1
+
+build GameEngine\Libs\glfw\src\install\local: phony GameEngine\Libs\glfw\src\CMakeFiles\install\local.util
+
+
+#############################################
+# Custom command for GameEngine\Libs\glfw\src\CMakeFiles\update_mappings
+
+build GameEngine\Libs\glfw\src\CMakeFiles\update_mappings | ${cmake_ninja_workdir}GameEngine\Libs\glfw\src\CMakeFiles\update_mappings: CUSTOM_COMMAND
+  COMMAND = cmd.exe /C "cd /D C:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\Libs\glfw\src && "C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -P C:/Prosjekter/Vulkan/VulkanGameEngine/GameEngine/Libs/glfw/CMake/GenerateMappings.cmake mappings.h.in mappings.h"
+  DESC = Updating gamepad mappings from upstream repository
+
 # =============================================================================
 # Target aliases.
 
 build GameEngine: phony GameEngine\GameEngine.exe
 
 build GameEngine.exe: phony GameEngine\GameEngine.exe
+
+build glfw: phony GameEngine\Libs\glfw\src\glfw3.lib
+
+build glfw3.lib: phony GameEngine\Libs\glfw\src\glfw3.lib
+
+build uninstall: phony GameEngine\Libs\glfw\uninstall
+
+build update_mappings: phony GameEngine\Libs\glfw\src\update_mappings
 
 # =============================================================================
 # Folder targets.
@@ -150,7 +577,21 @@ build all: phony GameEngine\all
 #############################################
 # Folder: C:/Prosjekter/Vulkan/VulkanGameEngine/out/build/x64-debug/GameEngine
 
-build GameEngine\all: phony GameEngine\GameEngine.exe
+build GameEngine\all: phony GameEngine\GameEngine.exe GameEngine\Libs\glfw\all
+
+# =============================================================================
+
+#############################################
+# Folder: C:/Prosjekter/Vulkan/VulkanGameEngine/out/build/x64-debug/GameEngine/Libs/glfw
+
+build GameEngine\Libs\glfw\all: phony GameEngine\Libs\glfw\src\all
+
+# =============================================================================
+
+#############################################
+# Folder: C:/Prosjekter/Vulkan/VulkanGameEngine/out/build/x64-debug/GameEngine/Libs/glfw/src
+
+build GameEngine\Libs\glfw\src\all: phony GameEngine\Libs\glfw\src\glfw3.lib
 
 # =============================================================================
 # Built-in targets
@@ -159,14 +600,14 @@ build GameEngine\all: phony GameEngine\GameEngine.exe
 #############################################
 # Re-run CMake if any of its inputs changed.
 
-build build.ninja: RERUN_CMAKE | C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\CMakeCInformation.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\CMakeCXXInformation.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\CMakeCommonLanguageInclude.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\CMakeGenericSystem.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\CMakeInitializeConfigs.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\CMakeLanguageInformation.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\CMakeRCInformation.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\CMakeSystemSpecificInformation.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\CMakeSystemSpecificInitialize.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\Compiler\CMakeCommonCompilerMacros.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\Compiler\MSVC-C.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\Compiler\MSVC-CXX.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\Compiler\MSVC.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\FindPackageHandleStandardArgs.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\FindPackageMessage.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\FindVulkan.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\Platform\Windows-MSVC-C.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\Platform\Windows-MSVC-CXX.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\Platform\Windows-MSVC.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\Platform\Windows.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\Platform\WindowsPaths.cmake C$:\Prosjekter\Vulkan\VulkanGameEngine\CMakeLists.txt C$:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\CMakeLists.txt CMakeCache.txt CMakeFiles\3.25.1-msvc1\CMakeCCompiler.cmake CMakeFiles\3.25.1-msvc1\CMakeCXXCompiler.cmake CMakeFiles\3.25.1-msvc1\CMakeRCCompiler.cmake CMakeFiles\3.25.1-msvc1\CMakeSystem.cmake
+build build.ninja: RERUN_CMAKE | C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\BasicConfigVersion-SameMajorVersion.cmake.in C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\CMakeCInformation.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\CMakeCXXInformation.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\CMakeCommonLanguageInclude.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\CMakeDependentOption.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\CMakeGenericSystem.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\CMakeInitializeConfigs.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\CMakeLanguageInformation.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\CMakePackageConfigHelpers.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\CMakeRCInformation.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\CMakeSystemSpecificInformation.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\CMakeSystemSpecificInitialize.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\CheckCSourceCompiles.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\CheckIncludeFile.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\CheckLibraryExists.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\Compiler\CMakeCommonCompilerMacros.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\Compiler\MSVC-C.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\Compiler\MSVC-CXX.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\Compiler\MSVC.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\FindPackageHandleStandardArgs.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\FindPackageMessage.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\FindThreads.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\FindVulkan.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\GNUInstallDirs.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\Internal\CheckSourceCompiles.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\Platform\Windows-MSVC-C.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\Platform\Windows-MSVC-CXX.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\Platform\Windows-MSVC.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\Platform\Windows.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\Platform\WindowsPaths.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\WriteBasicConfigVersionFile.cmake C$:\Prosjekter\Vulkan\VulkanGameEngine\CMakeLists.txt C$:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\CMakeLists.txt C$:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\Libs\glfw\CMakeLists.txt C$:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\Libs\glfw\CMake\cmake_uninstall.cmake.in C$:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\Libs\glfw\CMake\glfw3.pc.in C$:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\Libs\glfw\CMake\glfw3Config.cmake.in C$:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\Libs\glfw\src\CMakeLists.txt CMakeCache.txt CMakeFiles\3.25.1-msvc1\CMakeCCompiler.cmake CMakeFiles\3.25.1-msvc1\CMakeCXXCompiler.cmake CMakeFiles\3.25.1-msvc1\CMakeRCCompiler.cmake CMakeFiles\3.25.1-msvc1\CMakeSystem.cmake
   pool = console
 
 
 #############################################
 # A missing CMake input file is not an error.
 
-build C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\CMakeCInformation.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\CMakeCXXInformation.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\CMakeCommonLanguageInclude.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\CMakeGenericSystem.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\CMakeInitializeConfigs.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\CMakeLanguageInformation.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\CMakeRCInformation.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\CMakeSystemSpecificInformation.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\CMakeSystemSpecificInitialize.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\Compiler\CMakeCommonCompilerMacros.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\Compiler\MSVC-C.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\Compiler\MSVC-CXX.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\Compiler\MSVC.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\FindPackageHandleStandardArgs.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\FindPackageMessage.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\FindVulkan.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\Platform\Windows-MSVC-C.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\Platform\Windows-MSVC-CXX.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\Platform\Windows-MSVC.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\Platform\Windows.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\Platform\WindowsPaths.cmake C$:\Prosjekter\Vulkan\VulkanGameEngine\CMakeLists.txt C$:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\CMakeLists.txt CMakeCache.txt CMakeFiles\3.25.1-msvc1\CMakeCCompiler.cmake CMakeFiles\3.25.1-msvc1\CMakeCXXCompiler.cmake CMakeFiles\3.25.1-msvc1\CMakeRCCompiler.cmake CMakeFiles\3.25.1-msvc1\CMakeSystem.cmake: phony
+build C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\BasicConfigVersion-SameMajorVersion.cmake.in C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\CMakeCInformation.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\CMakeCXXInformation.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\CMakeCommonLanguageInclude.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\CMakeDependentOption.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\CMakeGenericSystem.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\CMakeInitializeConfigs.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\CMakeLanguageInformation.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\CMakePackageConfigHelpers.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\CMakeRCInformation.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\CMakeSystemSpecificInformation.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\CMakeSystemSpecificInitialize.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\CheckCSourceCompiles.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\CheckIncludeFile.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\CheckLibraryExists.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\Compiler\CMakeCommonCompilerMacros.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\Compiler\MSVC-C.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\Compiler\MSVC-CXX.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\Compiler\MSVC.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\FindPackageHandleStandardArgs.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\FindPackageMessage.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\FindThreads.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\FindVulkan.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\GNUInstallDirs.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\Internal\CheckSourceCompiles.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\Platform\Windows-MSVC-C.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\Platform\Windows-MSVC-CXX.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\Platform\Windows-MSVC.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\Platform\Windows.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\Platform\WindowsPaths.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.25\Modules\WriteBasicConfigVersionFile.cmake C$:\Prosjekter\Vulkan\VulkanGameEngine\CMakeLists.txt C$:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\CMakeLists.txt C$:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\Libs\glfw\CMakeLists.txt C$:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\Libs\glfw\CMake\cmake_uninstall.cmake.in C$:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\Libs\glfw\CMake\glfw3.pc.in C$:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\Libs\glfw\CMake\glfw3Config.cmake.in C$:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\Libs\glfw\src\CMakeLists.txt CMakeCache.txt CMakeFiles\3.25.1-msvc1\CMakeCCompiler.cmake CMakeFiles\3.25.1-msvc1\CMakeCXXCompiler.cmake CMakeFiles\3.25.1-msvc1\CMakeRCCompiler.cmake CMakeFiles\3.25.1-msvc1\CMakeSystem.cmake: phony
 
 
 #############################################
