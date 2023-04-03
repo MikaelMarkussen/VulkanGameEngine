@@ -3,7 +3,7 @@
 #
 
 # Add source to this project's executable.
-add_executable (GameEngine "GameEngine.cpp" )
+add_executable (GameEngine "main.cpp"  "Window.h" "Window.cpp")
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET GameEngine PROPERTY CXX_STANDARD 20)

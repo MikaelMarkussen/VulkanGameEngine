@@ -1,9 +1,10 @@
 # ninja log v5
 827	1082	7022457434853989	GameEngine/Libs/glfw/src/CMakeFiles/glfw.dir/win32_monitor.c.obj	e594d36362bab030
-4	1056	7022462026425391	GameEngine/CMakeFiles/GameEngine.dir/GameEngine.cpp.obj	152663bf242d5435
-1057	1308	7022462028621976	GameEngine/GameEngine.exe	bb132586df9f76d3
+7	2147	7022564783260360	GameEngine/CMakeFiles/GameEngine.dir/GameEngine.cpp.obj	152663bf242d5435
+3	635	7022656233613992	GameEngine/CMakeFiles/GameEngine.dir/main.cpp.obj	4db550787859a1b
+637	1031	7022656236918017	GameEngine/GameEngine.exe	48eac8dcc58fe0d
 88	853	7022457432135374	GameEngine/Libs/glfw/src/CMakeFiles/glfw.dir/null_window.c.obj	2ee2498b8f7d37b6
-2	204	7022522310548697	build.ninja	486d0d219f6c7f13
+2	204	7022657001141710	build.ninja	486d0d219f6c7f13
 120	795	7022457431983132	GameEngine/Libs/glfw/src/CMakeFiles/glfw.dir/win32_thread.c.obj	b97e7491c6ce325a
 14	826	7022457432055386	GameEngine/Libs/glfw/src/CMakeFiles/glfw.dir/init.c.obj	496f457839db6840
 65	837	7022457432075372	GameEngine/Libs/glfw/src/CMakeFiles/glfw.dir/osmesa_context.c.obj	1b4959b9936b0705
@@ -24,5 +25,6 @@
 846	1092	7022457434970193	GameEngine/Libs/glfw/src/CMakeFiles/glfw.dir/wgl_context.c.obj	5339493d402402e2
 837	1097	7022457435028242	GameEngine/Libs/glfw/src/CMakeFiles/glfw.dir/win32_window.c.obj	a30e032752e7df80
 1097	1244	7022457436453610	GameEngine/Libs/glfw/src/glfw3.lib	c1c637ad615bfc9b
-9	1389	7022522510120619	GameEngine/CMakeFiles/GameEngine.dir/GameEngine.cpp.obj	152663bf242d5435
-1390	1755	7022522513153967	GameEngine/GameEngine.exe	bb132586df9f76d3
+4	1182	7022667813150236	GameEngine/CMakeFiles/GameEngine.dir/main.cpp.obj	4db550787859a1b
+4	973	7022668854007081	GameEngine/CMakeFiles/GameEngine.dir/Window.cpp.obj	201ec66971c3711c
+973	1208	7022668855999270	GameEngine/GameEngine.exe	1fdef9df49b14302
