@@ -108,7 +108,7 @@ build install\local: phony CMakeFiles\install\local.util
 build cmake_object_order_depends_target_GameEngine: phony || cmake_object_order_depends_target_glfw
 
 build GameEngine\CMakeFiles\GameEngine.dir\main.cpp.obj: CXX_COMPILER__GameEngine_Debug C$:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\main.cpp || cmake_object_order_depends_target_GameEngine
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Ob0 /Od /RTC1 -DDEBUG -ZI -std:c++20
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Ob0 /Od /RTC1 -ZI -std:c++20
   INCLUDES = -IC:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\Libs\glfw\include -external:IC:\VulkanSDK\1.3.224.1\Include -external:W0
   OBJECT_DIR = GameEngine\CMakeFiles\GameEngine.dir
   OBJECT_FILE_DIR = GameEngine\CMakeFiles\GameEngine.dir
@@ -116,7 +116,7 @@ build GameEngine\CMakeFiles\GameEngine.dir\main.cpp.obj: CXX_COMPILER__GameEngin
   TARGET_PDB = GameEngine\GameEngine.pdb
 
 build GameEngine\CMakeFiles\GameEngine.dir\Window.cpp.obj: CXX_COMPILER__GameEngine_Debug C$:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\Window.cpp || cmake_object_order_depends_target_GameEngine
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Ob0 /Od /RTC1 -DDEBUG -ZI -std:c++20
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Ob0 /Od /RTC1 -ZI -std:c++20
   INCLUDES = -IC:\Prosjekter\Vulkan\VulkanGameEngine\GameEngine\Libs\glfw\include -external:IC:\VulkanSDK\1.3.224.1\Include -external:W0
   OBJECT_DIR = GameEngine\CMakeFiles\GameEngine.dir
   OBJECT_FILE_DIR = GameEngine\CMakeFiles\GameEngine.dir
@@ -132,7 +132,7 @@ build GameEngine\CMakeFiles\GameEngine.dir\Window.cpp.obj: CXX_COMPILER__GameEng
 # Link the executable GameEngine\GameEngine.exe
 
 build GameEngine\GameEngine.exe: CXX_EXECUTABLE_LINKER__GameEngine_Debug GameEngine\CMakeFiles\GameEngine.dir\main.cpp.obj GameEngine\CMakeFiles\GameEngine.dir\Window.cpp.obj | C$:\VulkanSDK\1.3.224.1\Lib\vulkan-1.lib GameEngine\Libs\glfw\src\glfw3.lib || GameEngine\Libs\glfw\src\glfw3.lib
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Ob0 /Od /RTC1 -DDEBUG -ZI
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Ob0 /Od /RTC1 -ZI
   LINK_FLAGS = /machine:x64 /debug /INCREMENTAL /subsystem:console
   LINK_LIBRARIES = C:\VulkanSDK\1.3.224.1\Lib\vulkan-1.lib  GameEngine\Libs\glfw\src\glfw3.lib  kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib
   OBJECT_DIR = GameEngine\CMakeFiles\GameEngine.dir
