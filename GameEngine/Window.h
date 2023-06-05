@@ -23,6 +23,10 @@ struct QueueFamilyIndices
 	{
 		return graphicsFamily.has_value() && computeFamily.has_value() && transfereFamily.has_value();
 	}
+	bool isComputeFamily() { return computeFamily.has_value(); }
+	bool isGraphicsFamily() { return graphicsFamily.has_value(); }
+	bool isTransfereFamily() { return transfereFamily.has_value(); }
+
 };
 
 
@@ -35,7 +39,8 @@ private:
 	GLFWwindow* window = nullptr;
 	VkInstance mInstance;
 	VkPhysicalDevice mPhysicalDevice = VK_NULL_HANDLE;
-	VkDevice device;
+	VkDevice mDevice;
+	VkQueue mGraphicsQueue;
 
 public:
 	void run();

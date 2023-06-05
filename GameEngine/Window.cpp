@@ -32,6 +32,7 @@ void WindowApp::WindowLoop()
 void WindowApp::CleanUp()
 {
 	vkDestroyInstance(mInstance, nullptr);
+	vkDestroyDevice(mDevice, nullptr);
 	glfwDestroyWindow(window);
 	glfwTerminate();
 }
@@ -147,5 +148,39 @@ bool WindowApp::checkForValidationLayerSupport()
 
 void WindowApp::createLogicalDevice()
 {
+	QueueFamilyIndices indices = findQueueFamily(mPhysicalDevice);
+	VkDeviceQueueCreateInfo queueInfo{};
 
+	queueInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
+	queueInfo.queueFamilyIndex = indices.graphicsFamily.value();
+	queueInfo.queueCount = 1;
+	float queuePriority = 1.f;
+	queueInfo.pQueuePriorities = &queuePriority;
+
+	VkPhysicalDeviceFeatures DeviceFeatures{};
+	
+	VkDeviceCreateInfo createInfo{};
+	
+	createInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
+	createInfo.pQueueCreateInfos = &queueInfo;
+	createInfo.queueCreateInfoCount = 1;
+
+	createInfo.pEnabledFeatures = &DeviceFeatures;
+
+	createInfo.enabledExtensionCount = 0;
+	
+	if (enableValidationLayers) 
+	{
+		createInfo.enabledLayerCount = static_cast<uint32_t>(mValidationLayers.size());
+		createInfo.ppEnabledLayerNames = mValidationLayers.data();
+	}
+	else 
+	{
+		createInfo.enabledLayerCount = 0;
+	}
+	if (vkCreateDevice(mPhysicalDevice, &createInfo, nullptr, &mDevice)) 
+	{
+		throw std::runtime_error("ERROR: failed to create logical device");
+	}
+	vkGetDeviceQueue(mDevice, indices.graphicsFamily.value(), 0, &mGraphicsQueue);
 }
