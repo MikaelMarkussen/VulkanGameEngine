@@ -178,9 +178,13 @@ void WindowApp::createLogicalDevice()
 	{
 		createInfo.enabledLayerCount = 0;
 	}
+
+
 	if (vkCreateDevice(mPhysicalDevice, &createInfo, nullptr, &mDevice)) 
 	{
 		throw std::runtime_error("ERROR: failed to create logical device");
 	}
+
+
 	vkGetDeviceQueue(mDevice, indices.graphicsFamily.value(), 0, &mGraphicsQueue);
 }
