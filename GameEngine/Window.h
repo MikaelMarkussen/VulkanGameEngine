@@ -1,8 +1,11 @@
 #pragma once
 
-
+#define VK_USE_PLATFORM_WIN32_KHR
+#define GLFW_INCLUDE_VULKAN
 #include "GLFW/glfw3.h"
-#include "glm/glm.hpp"
+#define GLFW_EXPOSE_NATIVE_WIN32
+#include "GLFW/glfw3native.h"
+
 #include "vulkan/vulkan.h"
 
 
@@ -10,8 +13,6 @@
 #include <vector>
 #include <optional>
 
-#define VK_USE_PLATFORM_WIN32_KHR
-#define GLFW_INCLUDE_VULKAN
 
 
 struct QueueFamilyIndices
@@ -19,9 +20,10 @@ struct QueueFamilyIndices
 	std::optional<uint32_t> graphicsFamily;
 	std::optional<uint32_t> computeFamily;
 	std::optional<uint32_t> transfereFamily;
+	std::optional<uint32_t> presentFamily;
 	bool isComplete()
 	{
-		return graphicsFamily.has_value() && computeFamily.has_value() && transfereFamily.has_value();
+		return graphicsFamily.has_value() && presentFamily.has_value();// && computeFamily.has_value() && transfereFamily.has_value();
 	}
 	bool isComputeFamily() { return computeFamily.has_value(); }
 	bool isGraphicsFamily() { return graphicsFamily.has_value(); }
@@ -36,11 +38,12 @@ private:
 	const int WIDTH = 900;
 	const int HEIGHT = 600;
 
-	GLFWwindow* window = nullptr;
+	GLFWwindow* mWindow = nullptr;
 	VkInstance mInstance;
 	VkPhysicalDevice mPhysicalDevice = VK_NULL_HANDLE;
 	VkDevice mDevice;
 	VkQueue mGraphicsQueue;
+	VkSurfaceKHR mSurface;
 
 public:
 	void run();
@@ -70,6 +73,9 @@ private:
 
 	//setting up logical device
 	void createLogicalDevice();
+
+	//creating surface
+	void createSurface();
 
 	//
 	const std::vector<const char*> mValidationLayers = {

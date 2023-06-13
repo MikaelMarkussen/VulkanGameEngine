@@ -14,26 +14,28 @@ void WindowApp::initWindow()
 	glfwInit();
 	glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 	glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
-	window = glfwCreateWindow(WIDTH, HEIGHT, "VulkanEngine", nullptr, nullptr);
+	mWindow = glfwCreateWindow(WIDTH, HEIGHT, "VulkanEngine", nullptr, nullptr);
 }
 void WindowApp::initVulkan()
 {
 	CreateInstance();
+	createSurface();
 	PhysicalDevice();
 	createLogicalDevice();
 }
 void WindowApp::WindowLoop()
 {
-	while (!glfwWindowShouldClose(window))
+	while (!glfwWindowShouldClose(mWindow))
 	{
 		glfwPollEvents();
 	}
 }
 void WindowApp::CleanUp()
 {
+	vkDestroySurfaceKHR(mInstance, mSurface, nullptr);
 	vkDestroyInstance(mInstance, nullptr);
 	vkDestroyDevice(mDevice, nullptr);
-	glfwDestroyWindow(window);
+	glfwDestroyWindow(mWindow);
 	glfwTerminate();
 }
 
@@ -99,10 +101,12 @@ bool WindowApp::isDeviceSuitable(VkPhysicalDevice Device)
 	vkGetPhysicalDeviceProperties(Device, &deviceProp);
 	QueueFamilyIndices indices = findQueueFamily(Device);
 
-	std::cout << deviceProp.deviceName << std::endl;
+	std::cout <<"GPU: " << deviceProp.deviceName << std::endl;
 	std::cout  << "Graphics queue family : " << indices.graphicsFamily.has_value() << std::endl;
 	std::cout << "Transfere queue family : " << indices.transfereFamily.has_value() << std::endl;
-	std::cout << "Comnpute queue family : " << indices.computeFamily.has_value() << std::endl;
+	std::cout << "Compute queue family : " << indices.computeFamily.has_value() << std::endl;
+	std::cout << "Present queue family : " << indices.presentFamily.has_value() << std::endl;
+
 	std::cout << "is complete : " << indices.isComplete();
 
 
@@ -131,9 +135,15 @@ QueueFamilyIndices WindowApp::findQueueFamily(VkPhysicalDevice device)
 		{
 			indices.transfereFamily = i;
 		}
-		
+		VkBool32 presentSupport;
+		vkGetPhysicalDeviceSurfaceSupportKHR(device, i, mSurface, &presentSupport);
+		if (presentSupport)
+		{
+			indices.presentFamily = i;
+		}
 		i++;
 	}
+
 	return indices;
 }
 
@@ -187,4 +197,23 @@ void WindowApp::createLogicalDevice()
 
 
 	vkGetDeviceQueue(mDevice, indices.graphicsFamily.value(), 0, &mGraphicsQueue);
+}
+
+void WindowApp::createSurface()
+{
+	VkWin32SurfaceCreateInfoKHR createInfo {};
+
+	createInfo.sType = VK_STRUCTURE_TYPE_WIN32_SURFACE_CREATE_INFO_KHR;
+	createInfo.hwnd = glfwGetWin32Window(mWindow);
+	createInfo.hinstance = GetModuleHandle(nullptr);
+
+	if (vkCreateWin32SurfaceKHR(mInstance, &createInfo, nullptr, &mSurface) != VK_SUCCESS) 
+	{
+		throw std::runtime_error("ERROR: Could not create window surface");
+	}
+	else
+	{
+		std::cout << "LOG: Window surface created \n";
+	}
+
 }
