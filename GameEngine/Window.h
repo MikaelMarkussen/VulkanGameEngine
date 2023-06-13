@@ -43,6 +43,7 @@ private:
 	VkPhysicalDevice mPhysicalDevice = VK_NULL_HANDLE;
 	VkDevice mDevice;
 	VkQueue mGraphicsQueue;
+	VkQueue mPresentQueue;
 	VkSurfaceKHR mSurface;
 
 public:
