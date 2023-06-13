@@ -1,3 +1,0 @@
-[submodule "GameEngine/Libs/glfw"]
-	path = GameEngine/Libs/glfw
-	url = https://github.com/glfw/glfw.git
