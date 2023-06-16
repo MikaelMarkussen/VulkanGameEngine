@@ -102,13 +102,11 @@ bool WindowApp::isDeviceSuitable(VkPhysicalDevice Device)
 	QueueFamilyIndices indices = findQueueFamily(Device);
 
 	std::cout <<"GPU: " << deviceProp.deviceName << std::endl;
+	std::cout << "Driver: " << deviceProp.driverVersion << std::endl;
 	std::cout  << "Graphics queue family : " << indices.graphicsFamily.has_value() << std::endl;
 	std::cout << "Transfere queue family : " << indices.transfereFamily.has_value() << std::endl;
 	std::cout << "Compute queue family : " << indices.computeFamily.has_value() << std::endl;
 	std::cout << "Present queue family : " << indices.presentFamily.has_value() << std::endl;
-
-	std::cout << "is complete : " << indices.isComplete();
-
 
 	return deviceProp.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU && Devicefeat.geometryShader && indices.isComplete();
 
@@ -159,21 +157,28 @@ bool WindowApp::checkForValidationLayerSupport()
 void WindowApp::createLogicalDevice()
 {
 	QueueFamilyIndices indices = findQueueFamily(mPhysicalDevice);
-	VkDeviceQueueCreateInfo queueInfo{};
 
-	queueInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
-	queueInfo.queueFamilyIndex = indices.graphicsFamily.value();
-	queueInfo.queueCount = 1;
+	std::vector<VkDeviceQueueCreateInfo> queueCreateinfos;
+	std::set<uint32_t> uniqueQueueFamily = { indices.graphicsFamily.value(), indices.presentFamily.value() };
+
 	float queuePriority = 1.f;
-	queueInfo.pQueuePriorities = &queuePriority;
+	for (uint32_t queueFamily : uniqueQueueFamily)
+	{
+		VkDeviceQueueCreateInfo queueCreateInfo{};
+		queueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
+		queueCreateInfo.queueFamilyIndex = queueFamily;
+		queueCreateInfo.queueCount = 1;
+		queueCreateInfo.pQueuePriorities = &queuePriority;
+		queueCreateinfos.push_back(queueCreateInfo);
+	}
 
 	VkPhysicalDeviceFeatures DeviceFeatures{};
 	
 	VkDeviceCreateInfo createInfo{};
 	
 	createInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
-	createInfo.pQueueCreateInfos = &queueInfo;
-	createInfo.queueCreateInfoCount = 1;
+	createInfo.queueCreateInfoCount = static_cast<uint32_t>(queueCreateinfos.size());
+	createInfo.pQueueCreateInfos = queueCreateinfos.data();
 
 	createInfo.pEnabledFeatures = &DeviceFeatures;
 
@@ -197,6 +202,7 @@ void WindowApp::createLogicalDevice()
 
 
 	vkGetDeviceQueue(mDevice, indices.graphicsFamily.value(), 0, &mGraphicsQueue);
+	vkGetDeviceQueue(mDevice, indices.presentFamily.value(), 0, &mPresentQueue);
 }
 
 void WindowApp::createSurface()
