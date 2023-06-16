@@ -19,7 +19,7 @@ void WindowApp::initWindow()
 void WindowApp::initVulkan()
 {
 	CreateInstance();
-	createSurface();
+	createSurface();	
 	PhysicalDevice();
 	createLogicalDevice();
 }
@@ -100,6 +100,7 @@ bool WindowApp::isDeviceSuitable(VkPhysicalDevice Device)
 	vkGetPhysicalDeviceFeatures(Device, &Devicefeat);
 	vkGetPhysicalDeviceProperties(Device, &deviceProp);
 	QueueFamilyIndices indices = findQueueFamily(Device);
+	bool extensionSupport = checkExtensionSupport(Device);
 
 	std::cout <<"GPU: " << deviceProp.deviceName << std::endl;
 	std::cout << "Driver: " << deviceProp.driverVersion << std::endl;
@@ -108,7 +109,7 @@ bool WindowApp::isDeviceSuitable(VkPhysicalDevice Device)
 	std::cout << "Compute queue family : " << indices.computeFamily.has_value() << std::endl;
 	std::cout << "Present queue family : " << indices.presentFamily.has_value() << std::endl;
 
-	return deviceProp.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU && Devicefeat.geometryShader && indices.isComplete();
+	return deviceProp.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU && Devicefeat.geometryShader && indices.isComplete() && extensionSupport   ;
 
 }
 
@@ -143,6 +144,11 @@ QueueFamilyIndices WindowApp::findQueueFamily(VkPhysicalDevice device)
 	}
 
 	return indices;
+}
+
+bool WindowApp::checkExtensionSupport(VkPhysicalDevice device)
+{
+	return true;
 }
 
 bool WindowApp::checkForValidationLayerSupport()

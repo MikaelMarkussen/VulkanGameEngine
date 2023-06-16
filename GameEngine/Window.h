@@ -68,7 +68,8 @@ private:
 	//setting up queue families
 	QueueFamilyIndices findQueueFamily(VkPhysicalDevice device);
 
-
+	//
+	bool checkExtensionSupport(VkPhysicalDevice device);
 
 	//setting up validationLayers
 	bool checkForValidationLayerSupport();
@@ -82,6 +83,10 @@ private:
 	//
 	const std::vector<const char*> mValidationLayers = {
 		"VK_LAYER_KHRONOS_validation"
+	};
+
+	const std::vector<const char*> deviceExtansions = {
+		VK_KHR_SWAPCHAIN_EXTENSION_NAME
 	};
 
 #ifdef DEBUG
