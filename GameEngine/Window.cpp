@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <limits>
 #include <cstdint>
+#include <fstream>
 
 //to run std::numeric_limits<T>::max()
 //#undef max
@@ -19,7 +20,7 @@ void WindowApp::initWindow()
 	glfwInit();
 	glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 	glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
-	mWindow = glfwCreateWindow(WIDTH, HEIGHT, "VulkanEngine", nullptr, nullptr);
+	mWindow = glfwCreateWindow(WIDTH, HEIGHT, "Vulkan Engine", nullptr, nullptr);
 }
 void WindowApp::initVulkan()
 {
@@ -28,6 +29,8 @@ void WindowApp::initVulkan()
 	PhysicalDevice();
 	createLogicalDevice();
 	createSwapChain();
+	createImageVeiw();
+	createGraphicsPipeline();
 }
 void WindowApp::WindowLoop()
 {
@@ -38,8 +41,13 @@ void WindowApp::WindowLoop()
 }
 void WindowApp::CleanUp()
 {
+	for (auto imageView : swapChainImageViews) {
+		vkDestroyImageView(mDevice, imageView, nullptr);
+	}
+
 	vkDestroySurfaceKHR(mInstance, mSurface, nullptr);
 	vkDestroyInstance(mInstance, nullptr);
+	vkDestroySwapchainKHR(mDevice,mSwapChain,nullptr);
 	vkDestroyDevice(mDevice, nullptr);
 	glfwDestroyWindow(mWindow);
 	glfwTerminate();
@@ -369,6 +377,98 @@ void WindowApp::createSwapChain()
 		createInfo.pQueueFamilyIndices = nullptr;
 	}
 	createInfo.preTransform = swapchainSup.capabilities.currentTransform;
-	createInfo.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT;
+	createInfo.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
+	createInfo.presentMode = presentMode;
+	createInfo.clipped = VK_TRUE;
+	createInfo.oldSwapchain = VK_NULL_HANDLE;
 
+	if (vkCreateSwapchainKHR(mDevice, &createInfo, nullptr, &mSwapChain) != VK_SUCCESS) 
+	{
+		throw std::runtime_error("ERROR: failed to create swapchain");
+	}
+	
+
+	vkGetSwapchainImagesKHR(mDevice,mSwapChain,&imageCount,nullptr);
+	swapChainImage.resize(imageCount);
+	vkGetSwapchainImagesKHR(mDevice,mSwapChain,&imageCount,swapChainImage.data());
+	mSwapChainImageFormat = surfaceformat.format;
+	mSwapchainExtent = extent;
+}
+
+void WindowApp::createImageVeiw()
+{
+	swapChainImageViews.resize(swapChainImage.size());
+
+	for(auto i = 0; i < swapChainImage.size();i++)
+	{
+		VkImageViewCreateInfo createInfo{};
+		createInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
+		createInfo.image = swapChainImage[i];
+
+		createInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
+		createInfo.format = mSwapChainImageFormat;
+		createInfo.components.r = VK_COMPONENT_SWIZZLE_IDENTITY;
+		createInfo.components.g = VK_COMPONENT_SWIZZLE_IDENTITY;
+		createInfo.components.b = VK_COMPONENT_SWIZZLE_IDENTITY;
+		createInfo.components.a = VK_COMPONENT_SWIZZLE_IDENTITY;
+
+		createInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+		createInfo.subresourceRange.baseMipLevel = 0;
+		createInfo.subresourceRange.levelCount = 1;
+		createInfo.subresourceRange.baseArrayLayer = 0;
+		createInfo.subresourceRange.layerCount = 1;
+		if (vkCreateImageView(mDevice, &createInfo, nullptr, &swapChainImageViews[i]) != VK_SUCCESS) {
+			throw std::runtime_error("ERROR: failed to create image views");
+		}
+
+	}
+}
+
+void WindowApp::createGraphicsPipeline()
+{
+	auto vertexShad = readShaderFile("C:/Prosjekter/Vulkan/VulkanGameEngine/GameEngine/Shader/vert.spv");
+	auto fragmentShad = readShaderFile("C:/Prosjekter/Vulkan/VulkanGameEngine/GameEngine/Shader/frag.spv");
+
+	VkShaderModule vertShaderMod = createShaderModule(vertexShad);
+	VkShaderModule fragShaderMod = createShaderModule(fragmentShad);
+
+}
+
+VkShaderModule WindowApp::createShaderModule(const std::vector<char>& code)
+{
+	VkShaderModuleCreateInfo createInfo{};
+	createInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
+	createInfo.codeSize = code.size();
+	createInfo.pCode = reinterpret_cast<const uint32_t*>(code.data());
+	
+
+	VkShaderModule shaderMod;
+
+	if(vkCreateShaderModule(mDevice,&createInfo,nullptr,&shaderMod) != VK_SUCCESS)
+	{
+		throw std::runtime_error("ERORR: Could not create shadermodule");
+	}
+	return shaderMod;
+}
+
+std::vector<char> WindowApp::readShaderFile(const std::string& fileName)
+{
+	std::ifstream file(fileName, std::ios::ate | std::ios::binary);
+
+
+	if (!file.is_open())
+	{
+		throw std::runtime_error("ERROR: Could not open shader file");
+	}
+		size_t fileSize = file.tellg();
+		std::vector<char> buffer(fileSize);
+
+		file.seekg(0);
+		file.read(buffer.data(), fileSize);
+
+		file.close();
+
+		std::cout << "LOG: read file from: " << fileName << std::endl;
+		return buffer;
+	
 }

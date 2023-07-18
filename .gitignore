@@ -79,3 +79,4 @@ out/
 /.idea
 *.hint
 *.swp
+*.bin

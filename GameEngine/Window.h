@@ -13,7 +13,8 @@
 #include <vector>
 #include <optional>
 #include <set>
-
+constexpr int WIDTH = 900;
+constexpr int HEIGHT = 600;
 
 
 struct QueueFamilyIndices
@@ -42,8 +43,7 @@ struct SwapChainSupportDetails
 class WindowApp 
 {
 private:
-	const int WIDTH = 900;
-	const int HEIGHT = 600;
+
 
 	GLFWwindow* mWindow = nullptr;
 	VkInstance mInstance;
@@ -52,6 +52,10 @@ private:
 	VkQueue mGraphicsQueue;
 	VkQueue mPresentQueue;
 	VkSurfaceKHR mSurface;
+	VkSwapchainKHR mSwapChain;
+
+	VkFormat mSwapChainImageFormat;
+	VkExtent2D mSwapchainExtent;
 
 public:
 	void run();
@@ -93,7 +97,18 @@ private:
 	VkExtent2D chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities);
 	void createSwapChain();
 
-	//
+
+	//image view
+	void createImageVeiw();
+
+	void createGraphicsPipeline();
+
+	VkShaderModule createShaderModule(const std::vector<char>& code);
+
+
+
+	static std::vector<char> readShaderFile(const std::string& fileName);
+
 	const std::vector<const char*> mValidationLayers = {
 		"VK_LAYER_KHRONOS_validation"
 	};
@@ -102,6 +117,8 @@ private:
 		VK_KHR_SWAPCHAIN_EXTENSION_NAME
 	};
 
+	std::vector<VkImage> swapChainImage;
+	std::vector<VkImageView> swapChainImageViews;
 #ifdef DEBUG
 	const bool enableValidationLayers = true;
 #else
