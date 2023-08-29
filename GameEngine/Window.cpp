@@ -30,7 +30,9 @@ void WindowApp::initVulkan()
 	createLogicalDevice();
 	createSwapChain();
 	createImageVeiw();
+	createRenderPass();
 	createGraphicsPipeline();
+
 }
 void WindowApp::WindowLoop()
 {
@@ -51,6 +53,8 @@ void WindowApp::CleanUp()
 	vkDestroySurfaceKHR(mInstance, mSurface, nullptr);
 	vkDestroyInstance(mInstance, nullptr);
 	vkDestroySwapchainKHR(mDevice,mSwapChain,nullptr);
+	vkDestroyPipeline(mDevice, mPipeline, nullptr);
+	vkDestroyPipelineLayout(mDevice, mPipelinelayout, nullptr);
 	vkDestroyDevice(mDevice, nullptr);
 	glfwDestroyWindow(mWindow);
 	glfwTerminate();
@@ -503,7 +507,7 @@ void WindowApp::createGraphicsPipeline()
 	raztCreateinfo.depthClampEnable = VK_FALSE;
 	raztCreateinfo.rasterizerDiscardEnable = VK_FALSE;
 	raztCreateinfo.polygonMode = VK_POLYGON_MODE_FILL;
-	raztCreateinfo.lineWidth = 1.f;
+	raztCreateinfo.lineWidth = 1.0f;
 	raztCreateinfo.cullMode = VK_CULL_MODE_BACK_BIT;
 	raztCreateinfo.frontFace = VK_FRONT_FACE_CLOCKWISE;
 	raztCreateinfo.depthBiasEnable = VK_FALSE;
@@ -525,7 +529,90 @@ void WindowApp::createGraphicsPipeline()
 	colorBlendAtt.alphaBlendOp = VK_BLEND_OP_ADD;
 
 
+	VkPipelineColorBlendStateCreateInfo colorBlending{};
+	colorBlending.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
+	colorBlending.logicOpEnable = VK_FALSE;
+	colorBlending.logicOp = VK_LOGIC_OP_COPY;
+	colorBlending.attachmentCount = 1;
+	colorBlending.pAttachments = &colorBlendAtt;
+	colorBlending.blendConstants[0] = 0.0f; 
+	colorBlending.blendConstants[1] = 0.0f; 
+	colorBlending.blendConstants[2] = 0.0f; 
+	colorBlending.blendConstants[3] = 0.0f; 
+
+	VkPipelineLayoutCreateInfo pipelineLayCreateInfo{};
+	pipelineLayCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
+	pipelineLayCreateInfo.setLayoutCount = 0;
+	pipelineLayCreateInfo.pSetLayouts = nullptr;
+	pipelineLayCreateInfo.pushConstantRangeCount = 0;
+	pipelineLayCreateInfo.pPushConstantRanges = nullptr;
+
+	if (vkCreatePipelineLayout(mDevice,&pipelineLayCreateInfo,nullptr,&mPipelinelayout) != VK_SUCCESS)
+	{
+		throw std::runtime_error("ERROR: Failed to create PipelineLayout");
+	}
+	VkGraphicsPipelineCreateInfo pipelineInfo{};
+	pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
+	pipelineInfo.stageCount = 2;
+	pipelineInfo.pStages = shaderStages;
 	
+	pipelineInfo.pVertexInputState = &vertexcreateInfo;
+	pipelineInfo.pInputAssemblyState = &inAsmCreateinfo;
+	pipelineInfo.pViewportState = &viewCreateinfo;
+	pipelineInfo.pRasterizationState = &raztCreateinfo;
+	pipelineInfo.pMultisampleState = &multiCreateinfo;
+	pipelineInfo.pDepthStencilState = nullptr;
+	pipelineInfo.pColorBlendState = &colorBlending;
+	pipelineInfo.pDynamicState = &createInfo;
+	
+	pipelineInfo.layout = mPipelinelayout;
+	
+	pipelineInfo.renderPass = mRenderpass;
+	pipelineInfo.subpass = 0;
+	
+	pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
+	pipelineInfo.basePipelineIndex = -1;
+
+	if (vkCreateGraphicsPipelines(mDevice,VK_NULL_HANDLE,1,&pipelineInfo,nullptr,&mPipeline)!=VK_SUCCESS)
+	{
+		throw std::runtime_error("ERROR: Failed to create graphics pipeline");
+	}
+}
+
+void WindowApp::createRenderPass()
+{
+	VkAttachmentDescription colorAttachment{};
+	colorAttachment.format = mSwapChainImageFormat;
+	colorAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
+	colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+	colorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+
+	colorAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+	colorAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+
+	colorAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+	colorAttachment.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+
+	VkAttachmentReference colorRef{};
+	colorRef.attachment = 0;
+	colorRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+
+	VkSubpassDescription subpass{};
+	subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
+	subpass.colorAttachmentCount = 1;
+	subpass.pColorAttachments = &colorRef;
+
+	VkRenderPassCreateInfo createInfo{};
+	createInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
+	createInfo.attachmentCount = 1;
+	createInfo.pAttachments = &colorAttachment;
+	createInfo.subpassCount = 1;
+	createInfo.pSubpasses = &subpass;
+
+	if (vkCreateRenderPass(mDevice,&createInfo,nullptr,&mRenderpass))
+	{
+		throw std::runtime_error("ERROR: failed to create render pass");
+	}
 }
 
 VkShaderModule WindowApp::createShaderModule(const std::vector<char>& code)
@@ -561,8 +648,9 @@ std::vector<char> WindowApp::readShaderFile(const std::string& fileName)
 		file.read(buffer.data(), fileSize);
 
 		file.close();
-
-		std::cout << std::endl<<"LOG: read file from: " << fileName << std::endl;
+#ifdef DEBUG
+		std::cout << std::endl << "LOG: read file from: " << fileName;
+#endif // DEBUG
 		return buffer;
 	
 }

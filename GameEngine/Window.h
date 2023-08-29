@@ -53,6 +53,9 @@ private:
 	VkQueue mPresentQueue;
 	VkSurfaceKHR mSurface;
 	VkSwapchainKHR mSwapChain;
+	VkPipelineLayout mPipelinelayout;
+	VkRenderPass mRenderpass;
+	VkPipeline mPipeline;
 
 	VkFormat mSwapChainImageFormat;
 	VkExtent2D mSwapchainExtent;
@@ -103,9 +106,11 @@ private:
 
 	void createGraphicsPipeline();
 
+	void createRenderPass();
+
+
+
 	VkShaderModule createShaderModule(const std::vector<char>& code);
-
-
 
 	static std::vector<char> readShaderFile(const std::string& fileName);
 
