@@ -37,6 +37,9 @@ void WindowApp::WindowLoop()
 	while (!glfwWindowShouldClose(mWindow))
 	{
 		glfwPollEvents();
+		//if (glfwGetKey(mWindow,GLFW_KEY_ESCAPE)) {
+		//	return;
+		//}
 	}
 }
 void WindowApp::CleanUp()
@@ -365,7 +368,7 @@ void WindowApp::createSwapChain()
 	uint32_t queueFamily[] = {indices.graphicsFamily.value(),indices.presentFamily.value()};
 
 	if (indices.graphicsFamily != indices.presentFamily)
-	{
+	{	
 		createInfo.imageSharingMode = VK_SHARING_MODE_CONCURRENT;
 		createInfo.queueFamilyIndexCount = 2;
 		createInfo.pQueueFamilyIndices = queueFamily;
@@ -432,6 +435,97 @@ void WindowApp::createGraphicsPipeline()
 	VkShaderModule vertShaderMod = createShaderModule(vertexShad);
 	VkShaderModule fragShaderMod = createShaderModule(fragmentShad);
 
+	VkPipelineShaderStageCreateInfo VertCreateInfo{};
+
+	VertCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+	VertCreateInfo.stage = VK_SHADER_STAGE_VERTEX_BIT;
+	VertCreateInfo.module = vertShaderMod;
+	VertCreateInfo.pName = "main";
+
+	VkPipelineShaderStageCreateInfo FragCreateInfo{};
+
+	FragCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+	FragCreateInfo.stage = VK_SHADER_STAGE_FRAGMENT_BIT;
+	FragCreateInfo.module = fragShaderMod;
+	FragCreateInfo.pName = "main";
+
+	VkPipelineShaderStageCreateInfo shaderStages[] = { VertCreateInfo, FragCreateInfo };
+
+	vkDestroyShaderModule(mDevice,fragShaderMod,nullptr);
+	vkDestroyShaderModule(mDevice, vertShaderMod, nullptr);
+	
+	VkPipelineVertexInputStateCreateInfo vertexcreateInfo{};
+
+	vertexcreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
+	vertexcreateInfo.vertexBindingDescriptionCount = 0;
+	vertexcreateInfo.pVertexBindingDescriptions = nullptr;
+	vertexcreateInfo.vertexAttributeDescriptionCount = 0;
+	vertexcreateInfo.pVertexAttributeDescriptions = nullptr;
+
+	VkPipelineInputAssemblyStateCreateInfo inAsmCreateinfo{};
+
+	inAsmCreateinfo.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
+	inAsmCreateinfo.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
+	inAsmCreateinfo.primitiveRestartEnable = VK_FALSE;
+
+	VkViewport Viewport{};
+	Viewport.x = 0.f;
+	Viewport.y = 0.f;
+	Viewport.width = static_cast<float>(mSwapchainExtent.width);
+	Viewport.height = static_cast<float>(mSwapchainExtent.width);
+	Viewport.minDepth = 0.f;
+	Viewport.maxDepth = 1.f;
+
+	VkRect2D scissor{};
+	scissor.offset = { 0,0 };
+	scissor.extent = mSwapchainExtent;
+
+	std::vector<VkDynamicState> dynamicStates = {
+	VK_DYNAMIC_STATE_VIEWPORT,
+	VK_DYNAMIC_STATE_SCISSOR
+	};
+
+	VkPipelineDynamicStateCreateInfo createInfo{};
+
+	createInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
+	createInfo.dynamicStateCount = dynamicStates.size();
+	createInfo.pDynamicStates = dynamicStates.data();
+
+	VkPipelineViewportStateCreateInfo viewCreateinfo{};
+	viewCreateinfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
+	viewCreateinfo.scissorCount = 1;
+	viewCreateinfo.pScissors = &scissor;
+	viewCreateinfo.viewportCount = 1;
+	viewCreateinfo.pViewports = &Viewport;
+
+	VkPipelineRasterizationStateCreateInfo raztCreateinfo{};
+	raztCreateinfo.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
+	raztCreateinfo.depthClampEnable = VK_FALSE;
+	raztCreateinfo.rasterizerDiscardEnable = VK_FALSE;
+	raztCreateinfo.polygonMode = VK_POLYGON_MODE_FILL;
+	raztCreateinfo.lineWidth = 1.f;
+	raztCreateinfo.cullMode = VK_CULL_MODE_BACK_BIT;
+	raztCreateinfo.frontFace = VK_FRONT_FACE_CLOCKWISE;
+	raztCreateinfo.depthBiasEnable = VK_FALSE;
+
+	VkPipelineMultisampleStateCreateInfo multiCreateinfo{};
+	multiCreateinfo.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
+	multiCreateinfo.sampleShadingEnable = VK_FALSE;
+	multiCreateinfo.rasterizationSamples = VK_SAMPLE_COUNT_1_BIT;
+
+
+	VkPipelineColorBlendAttachmentState colorBlendAtt{};
+	colorBlendAtt.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
+	colorBlendAtt.blendEnable = VK_FALSE;
+	colorBlendAtt.srcColorBlendFactor = VK_BLEND_FACTOR_ONE;
+	colorBlendAtt.dstColorBlendFactor = VK_BLEND_FACTOR_ZERO;
+	colorBlendAtt.colorBlendOp = VK_BLEND_OP_ADD;
+	colorBlendAtt.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
+	colorBlendAtt.dstAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
+	colorBlendAtt.alphaBlendOp = VK_BLEND_OP_ADD;
+
+
+	
 }
 
 VkShaderModule WindowApp::createShaderModule(const std::vector<char>& code)
@@ -468,7 +562,7 @@ std::vector<char> WindowApp::readShaderFile(const std::string& fileName)
 
 		file.close();
 
-		std::cout << "LOG: read file from: " << fileName << std::endl;
+		std::cout << std::endl<<"LOG: read file from: " << fileName << std::endl;
 		return buffer;
 	
 }
