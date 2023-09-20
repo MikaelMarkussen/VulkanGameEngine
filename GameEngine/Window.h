@@ -13,9 +13,11 @@
 #include <vector>
 #include <optional>
 #include <set>
-constexpr int WIDTH = 900;
+
+constexpr int WIDTH =800;
 constexpr int HEIGHT = 600;
 
+const int MAX_FRAMES_IN_FLIGHT = 2;
 
 struct QueueFamilyIndices
 {
@@ -56,9 +58,17 @@ private:
 	VkPipelineLayout mPipelinelayout;
 	VkRenderPass mRenderpass;
 	VkPipeline mPipeline;
+	VkCommandPool mCommandPool;
+	VkCommandBuffer mCommandBuffer;
 
 	VkFormat mSwapChainImageFormat;
 	VkExtent2D mSwapchainExtent;
+
+	VkSemaphore imageAvalibleSemaphore;
+	VkSemaphore renderFinishedSemaphore;
+	VkFence infligthFence;
+
+	VkDebugUtilsMessengerEXT mDebugMessenger;
 
 public:
 	void run();
@@ -67,6 +77,7 @@ private:
 	void initWindow();
 	void initVulkan();
 	void WindowLoop();
+	void drawFrame();
 	void CleanUp();
 
 	//creating a vkinstance
@@ -86,6 +97,17 @@ private:
 
 	//setting up validationLayers
 	bool checkForValidationLayerSupport();
+	std::vector<const char*> getRequiredextensions();
+	static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(
+		VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
+		VkDebugUtilsMessageTypeFlagsEXT messageType,
+		const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,
+		void* pUserData);
+
+	void setupDebugMessenger();
+	VkResult CreateDebugUtilsMessengerEXT(VkInstance instance, const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkDebugUtilsMessengerEXT* pDebugMessenger);
+	void DestroyDebugUtilsMessengerEXT(VkInstance instance, VkDebugUtilsMessengerEXT debugMessenger, const VkAllocationCallbacks* pAllocator);
+	void populateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfoEXT& createInfo);
 
 	//setting up logical device
 	void createLogicalDevice();
@@ -108,7 +130,15 @@ private:
 
 	void createRenderPass();
 
+	void createFramebuffers();
 
+	void createCommandPool();
+
+	void createCommandBuffer();
+
+	void createSyncObj();
+
+	void recordCommandBuffer(VkCommandBuffer buffer, uint32_t index);
 
 	VkShaderModule createShaderModule(const std::vector<char>& code);
 
@@ -124,10 +154,13 @@ private:
 
 	std::vector<VkImage> swapChainImage;
 	std::vector<VkImageView> swapChainImageViews;
-#ifdef DEBUG
-	const bool enableValidationLayers = true;
-#else
+	std::vector<VkFramebuffer> swapChainFrambuffers;
+
+
+#ifdef NDEBUG
 	const bool enableValidationLayers = false;
+#else
+	const bool enableValidationLayers = true;
 #endif // DEBUG
 
 

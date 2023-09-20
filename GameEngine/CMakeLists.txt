@@ -1,9 +1,12 @@
 ﻿# CMakeList.txt : CMake project for GameEngine, include source and define
 # project specific logic here.
 #
-
 # Add source to this project's executable.
-add_executable (GameEngine "main.cpp"  "Window.h" "Window.cpp" "VulkanGraphics.h" "VulkanGraphics.cpp")
+
+
+add_executable (GameEngine "main.cpp"  "Window.h" "Window.cpp"  )
+
+add_compile_definitions(PROJECT_DIR="${CMAKE_CURRENT_SOURCE_DIR}")
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET GameEngine PROPERTY CXX_STANDARD 20)
@@ -20,4 +23,3 @@ set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 add_subdirectory(Libs/glfw)
 target_link_libraries(GameEngine glfw)
-
