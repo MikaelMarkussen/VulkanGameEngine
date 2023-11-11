@@ -4,7 +4,7 @@
 # Add source to this project's executable.
 
 
-add_executable (GameEngine "main.cpp"  "Window.h" "Window.cpp"  )
+add_executable (GameEngine "main.cpp"  "Window.h" "Window.cpp"   "Vertex.h")
 
 add_compile_definitions(PROJECT_DIR="${CMAKE_CURRENT_SOURCE_DIR}")
 

@@ -7,6 +7,7 @@
 #include "GLFW/glfw3native.h"
 
 #include "vulkan/vulkan.h"
+#include "Vertex.h"
 
 
 #include <iostream>
@@ -60,6 +61,12 @@ private:
 	VkPipeline mPipeline;
 	VkCommandPool mCommandPool;
 	VkCommandBuffer mCommandBuffer;
+	std::vector<VkCommandBuffer> commandBuffers;
+
+	VkBuffer mVertexBuffer;
+	VkDeviceMemory mVertexBufferMemory;
+	VkBuffer mIndexBuffer;
+	VkDeviceMemory mIndexBufferMemory;
 
 	VkFormat mSwapChainImageFormat;
 	VkExtent2D mSwapchainExtent;
@@ -68,7 +75,14 @@ private:
 	VkSemaphore renderFinishedSemaphore;
 	VkFence infligthFence;
 
+	std::vector<VkSemaphore> imageAvalibleSemaphores;
+	std::vector<VkSemaphore> renderFinishedSemaphores;
+	std::vector<VkFence> inFlightFences;
+
+	int currentFrame = 0;
+
 	VkDebugUtilsMessengerEXT mDebugMessenger;
+
 
 public:
 	void run();
@@ -121,7 +135,8 @@ private:
 	VkPresentModeKHR choosePresentMode(const std::vector<VkPresentModeKHR> &availablePresentModes);
 	VkExtent2D chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities);
 	void createSwapChain();
-
+	void recreateSwapChain();
+	void cleanUpSwapChain();
 
 	//image view
 	void createImageVeiw();
@@ -134,7 +149,7 @@ private:
 
 	void createCommandPool();
 
-	void createCommandBuffer();
+	void createCommandBuffers();
 
 	void createSyncObj();
 
@@ -143,6 +158,16 @@ private:
 	VkShaderModule createShaderModule(const std::vector<char>& code);
 
 	static std::vector<char> readShaderFile(const std::string& fileName);
+
+	void createVertexBuffer();
+
+	void createIndexBuffer();
+
+	void createBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer& buffer, VkDeviceMemory& bufferMemory);
+
+	void copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size);
+
+	uint32_t findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties);
 
 	const std::vector<const char*> mValidationLayers = {
 		"VK_LAYER_KHRONOS_validation"
@@ -156,7 +181,14 @@ private:
 	std::vector<VkImageView> swapChainImageViews;
 	std::vector<VkFramebuffer> swapChainFrambuffers;
 
+	const std::vector<Vertex> vertices = {
+		{{-0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}},
+		{{0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}},
+		{{0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}},
+		{{-0.5f, 0.5f}, {1.0f, 1.0f, 1.0f}}
+	};
 
+	const std::vector<uint16_t> indices = {0, 1, 2, 2, 3, 0};
 #ifdef NDEBUG
 	const bool enableValidationLayers = false;
 #else
