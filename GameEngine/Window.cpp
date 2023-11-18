@@ -36,11 +36,15 @@ void WindowApp::initVulkan()
 	createSwapChain();
 	createImageVeiw();
 	createRenderPass();
+	createDescriptorSetLayout();
 	createGraphicsPipeline();
 	createFramebuffers();
 	createCommandPool();
 	createVertexBuffer();
 	createIndexBuffer();
+	createUniformBuffers();
+	createDescriptorPool();
+	createDescriptorSets();
 	createCommandBuffers();
 	createSyncObj();
 }
@@ -48,6 +52,16 @@ void WindowApp::initVulkan()
 void WindowApp::CleanUp()
 {
 	cleanUpSwapChain();
+	
+	for (auto i = 0; i < MAX_FRAMES_IN_FLIGHT; i++)
+	{
+		vkDestroyBuffer(mDevice, mUniformBuffers[i], nullptr);
+		vkFreeMemory(mDevice, mUniformBuffersMemory[i], nullptr);
+	}
+	
+	vkDestroyDescriptorPool(mDevice, mDescriptorPool, nullptr);
+	vkDestroyDescriptorSetLayout(mDevice, mDescriptorSetLayout, nullptr);
+
 	for (auto i = 0; i < MAX_FRAMES_IN_FLIGHT; i++)
 	{
 		vkDestroySemaphore(mDevice, renderFinishedSemaphores[i], nullptr);
@@ -97,12 +111,13 @@ void WindowApp::WindowLoop()
 		//system("cls");
 
 		glfwPollEvents();
-		auto frameStart = std::chrono::high_resolution_clock::now();
+		//auto frameStart = std::chrono::high_resolution_clock::now();
 		drawFrame();
-		auto frameEnd = std::chrono::high_resolution_clock::now();
+		//auto frameEnd = std::chrono::high_resolution_clock::now();
 
-		std::chrono::duration<double, std::milli> elapsed = frameEnd - frameStart;
-		double fps = 1000.0 / elapsed.count();
+	//		std::chrono::duration<double, std::milli> elapsed = frameEnd - frameStart;
+	//	double fps = 1000.0 / elapsed.count();
+	//	double deltaTime = elapsed.count();
 		
 		//std::cout << "Frame time: " << elapsed.count() << "ms" << std::endl;
 		//std::cout << "FPS: " << fps << std::endl;
@@ -127,6 +142,8 @@ void WindowApp::drawFrame()
 	{
 		throw std::runtime_error("ERROR: FAILED TO AQUIRE SWAPCHAIN IMAGE");
 	}
+
+	updateUniformBuffer(currentFrame);
 
 	vkResetCommandBuffer(commandBuffers[currentFrame], 0);
 	recordCommandBuffer(commandBuffers[currentFrame], imageIndex);
@@ -166,8 +183,9 @@ void WindowApp::drawFrame()
 	presentInfo.pImageIndices = &imageIndex;
 
 	vkQueuePresentKHR(mPresentQueue,&presentInfo);
-	currentFrame = (currentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
 
+	currentFrame = (currentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
+	//std::cout << currentFrame << std::endl;
 }
 
 
@@ -704,7 +722,7 @@ void WindowApp::createGraphicsPipeline()
 	raztCreateinfo.polygonMode = VK_POLYGON_MODE_FILL;
 	raztCreateinfo.lineWidth = 1.0f;
 	raztCreateinfo.cullMode = VK_CULL_MODE_BACK_BIT;
-	raztCreateinfo.frontFace = VK_FRONT_FACE_CLOCKWISE;
+	raztCreateinfo.frontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE;
 	raztCreateinfo.depthBiasEnable = VK_FALSE;
 
 	VkPipelineMultisampleStateCreateInfo multiCreateinfo{};
@@ -742,15 +760,16 @@ void WindowApp::createGraphicsPipeline()
 	VK_DYNAMIC_STATE_SCISSOR
 	};
 
-	VkPipelineDynamicStateCreateInfo DynamicCreateInfo{};
+	VkPipelineDynamicStateCreateInfo DynamicCreateInfo{}; 
 	DynamicCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
 	DynamicCreateInfo.dynamicStateCount = static_cast<uint32_t>(dynamicStates.size());
 	DynamicCreateInfo.pDynamicStates = dynamicStates.data();
 
 	VkPipelineLayoutCreateInfo pipelineLayCreateInfo{};
 	pipelineLayCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
-	pipelineLayCreateInfo.setLayoutCount = 0;
-	pipelineLayCreateInfo.pushConstantRangeCount = 0;
+	pipelineLayCreateInfo.setLayoutCount = 1;
+	pipelineLayCreateInfo.pSetLayouts =	&mDescriptorSetLayout;
+
 
 	if (vkCreatePipelineLayout(mDevice,&pipelineLayCreateInfo,nullptr,&mPipelinelayout) != VK_SUCCESS)
 	{
@@ -956,8 +975,9 @@ void WindowApp::recordCommandBuffer(VkCommandBuffer buffer, uint32_t index)
 
 	vkCmdSetScissor(buffer,0,1,&scissor);
 
-	vkCmdDrawIndexed(buffer, static_cast<uint32_t>(indices.size()), 1, 0, 0, 0);
+	vkCmdBindDescriptorSets(buffer,VK_PIPELINE_BIND_POINT_GRAPHICS,mPipelinelayout,0,1,&mDescriptorSets[currentFrame], 0, nullptr);
 
+	vkCmdDrawIndexed(buffer, static_cast<uint32_t>(indices.size()), 1, 0, 0, 0);
 
 	vkCmdEndRenderPass(buffer);
 
@@ -1130,4 +1150,113 @@ uint32_t WindowApp::findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags pr
 	throw std::runtime_error("ERROR: failed to find suitable memory type");
 
   
+}
+
+void WindowApp::createDescriptorSetLayout()
+{
+	VkDescriptorSetLayoutBinding uboLayoutBinding{};
+	uboLayoutBinding.binding = 0;	
+	uboLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+	uboLayoutBinding.descriptorCount = 1;
+	uboLayoutBinding.stageFlags =  VK_SHADER_STAGE_VERTEX_BIT;
+	uboLayoutBinding.pImmutableSamplers = nullptr;
+
+	VkDescriptorSetLayoutCreateInfo layoutCreateInfo{};
+	layoutCreateInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
+	layoutCreateInfo.bindingCount = 1;
+	layoutCreateInfo.pBindings = &uboLayoutBinding;
+
+	if (vkCreateDescriptorSetLayout(mDevice,&layoutCreateInfo,nullptr, &mDescriptorSetLayout) != VK_SUCCESS)
+	{
+		throw std::runtime_error("ERROR: Failed to set descriptor Layout");
+	}
+}
+
+void WindowApp::createUniformBuffers()
+{
+	VkDeviceSize bufferSize = sizeof(UniformBufferObject);
+
+	mUniformBuffers.resize(MAX_FRAMES_IN_FLIGHT);
+	mUniformBuffersMemory.resize(MAX_FRAMES_IN_FLIGHT);
+	mUniformBuffersMapped.resize(MAX_FRAMES_IN_FLIGHT);
+
+	for(size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++)
+	{
+		createBuffer(bufferSize, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, mUniformBuffers[i], mUniformBuffersMemory[i]);
+	
+		vkMapMemory(mDevice, mUniformBuffersMemory[i], 0, bufferSize, 0, &mUniformBuffersMapped[i]);
+	}
+}
+
+void WindowApp::updateUniformBuffer(uint32_t currentImage)
+{
+	static auto startTime = std::chrono::high_resolution_clock::now();
+
+	auto currentTime = std::chrono::high_resolution_clock::now();
+	float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
+
+	UniformBufferObject ubo{};
+	ubo.model = glm::rotate(glm::mat4(1.0f),time * glm::radians(90.0f),glm::vec3(0.0f,0.0f,1.0f));
+	ubo.view = glm::lookAt(glm::vec3(2.0f,2.0f,2.0f),glm::vec3(0.0f,0.0f,0.0f),glm::vec3(0.0f,0.0f,1.0f));
+	ubo.proj = glm::perspective(glm::radians(45.0f),mSwapchainExtent.width / (float)mSwapchainExtent.height,0.1f,10.0f);
+	ubo.proj[1][1] *= -1;
+
+	memcpy(mUniformBuffersMapped[currentImage],&ubo,sizeof(ubo));
+}
+
+void WindowApp::createDescriptorPool()
+{
+	VkDescriptorPoolSize poolSize{};
+	poolSize.type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+	poolSize.descriptorCount = static_cast<uint32_t>(swapChainImage.size());
+
+	VkDescriptorPoolCreateInfo poolCreateInfo{};
+	poolCreateInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
+	poolCreateInfo.poolSizeCount = 1;
+	poolCreateInfo.pPoolSizes = &poolSize;
+	poolCreateInfo.maxSets = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT);
+
+	if (vkCreateDescriptorPool(mDevice, &poolCreateInfo, nullptr, &mDescriptorPool) != VK_SUCCESS)
+	{
+		throw std::runtime_error("ERROR: Failed to create descriptor pool");
+	}
+}
+
+void WindowApp::createDescriptorSets()
+{
+	std::vector<VkDescriptorSetLayout> layouts(MAX_FRAMES_IN_FLIGHT, mDescriptorSetLayout);
+
+	VkDescriptorSetAllocateInfo allocInfo{};
+	allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
+	allocInfo.descriptorPool = mDescriptorPool;
+	allocInfo.descriptorSetCount = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT);
+	allocInfo.pSetLayouts = layouts.data();
+
+	mDescriptorSets.resize(MAX_FRAMES_IN_FLIGHT);
+
+	if (vkAllocateDescriptorSets(mDevice,&allocInfo,mDescriptorSets.data()) != VK_SUCCESS)
+	{
+		throw std::runtime_error("ERROR: Failed to allocate descriptor sets");
+	}
+
+	for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++)
+	{
+		VkDescriptorBufferInfo bufferInfo{};
+		bufferInfo.buffer = mUniformBuffers[i];
+		bufferInfo.offset = 0;
+		bufferInfo.range = sizeof(UniformBufferObject);
+
+		VkWriteDescriptorSet descriptorWrite{};
+		descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+		descriptorWrite.dstSet = mDescriptorSets[i];
+		descriptorWrite.dstBinding = 0;
+		descriptorWrite.dstArrayElement = 0;
+		descriptorWrite.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+		descriptorWrite.descriptorCount = 1;
+		descriptorWrite.pBufferInfo = &bufferInfo;
+		descriptorWrite.pImageInfo = nullptr;
+		descriptorWrite.pTexelBufferView = nullptr;
+
+		vkUpdateDescriptorSets(mDevice, 1, &descriptorWrite, 0, nullptr);
+	}
 }

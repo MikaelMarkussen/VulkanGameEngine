@@ -15,6 +15,11 @@
 #include <optional>
 #include <set>
 
+struct UniformBufferObject {
+	alignas(16) glm::mat4 model;
+	alignas(16) glm::mat4 view;
+	alignas(16) glm::mat4 proj;
+};
 constexpr int WIDTH =800;
 constexpr int HEIGHT = 600;
 
@@ -63,10 +68,20 @@ private:
 	VkCommandBuffer mCommandBuffer;
 	std::vector<VkCommandBuffer> commandBuffers;
 
+	VkDescriptorSetLayout mDescriptorSetLayout;
+	VkPipelineLayout mPipelineLayout;
+
 	VkBuffer mVertexBuffer;
 	VkDeviceMemory mVertexBufferMemory;
 	VkBuffer mIndexBuffer;
 	VkDeviceMemory mIndexBufferMemory;
+
+	std::vector<VkBuffer> mUniformBuffers;
+	std::vector<VkDeviceMemory> mUniformBuffersMemory;
+	std::vector<void*> mUniformBuffersMapped;
+
+	VkDescriptorPool mDescriptorPool;
+	std::vector<VkDescriptorSet> mDescriptorSets;
 
 	VkFormat mSwapChainImageFormat;
 	VkExtent2D mSwapchainExtent;
@@ -79,7 +94,7 @@ private:
 	std::vector<VkSemaphore> renderFinishedSemaphores;
 	std::vector<VkFence> inFlightFences;
 
-	int currentFrame = 0;
+	uint32_t currentFrame = 0;
 
 	VkDebugUtilsMessengerEXT mDebugMessenger;
 
@@ -168,6 +183,15 @@ private:
 	void copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size);
 
 	uint32_t findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties);
+
+	void createDescriptorSetLayout();
+
+	void createUniformBuffers();
+
+	void updateUniformBuffer(uint32_t currentImage);
+
+	void createDescriptorPool();
+	void createDescriptorSets();
 
 	const std::vector<const char*> mValidationLayers = {
 		"VK_LAYER_KHRONOS_validation"
