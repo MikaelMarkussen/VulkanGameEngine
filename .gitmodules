@@ -1,3 +1,6 @@
 [submodule "GameEngine/Libs/glfw"]
 	path = GameEngine/Libs/glfw
 	url = https://github.com/glfw/glfw.git
+[submodule "GameEngine/Libs/stb"]
+	path = GameEngine/Libs/stb
+	url = https://github.com/nothings/stb.git
