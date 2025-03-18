@@ -1,5 +1,4 @@
 #include "Window.h"
-#include <algorithm>
 #include <limits>
 #include <cstdint>
 #include <fstream>
@@ -8,8 +7,6 @@
 #include <chrono>
 #include <Windows.h>
 
-//to run std::numeric_limits<T>::max()
-//#undef max
 
 void WindowApp::run()
 {
@@ -270,12 +267,35 @@ bool WindowApp::isDeviceSuitable(VkPhysicalDevice Device)
 	bool swapChainSupported = false;
 	if (extensionSupport) 
 	{
-		SwapChainSupportDetails swapChainDet = querySwapChainSupport(Device);
+		VulkanEngine::SwapChainSupportDetails swapChainDet = querySwapChainSupport(Device);
 		swapChainSupported = !swapChainDet.formats.empty() && !swapChainDet.presentMode.empty();
 	}
 
 	return deviceProp.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU && Devicefeat.geometryShader && indices.isComplete() && extensionSupport&&swapChainSupported;
 
+}
+
+int rateDevice(VkPhysicalDevice device)
+{
+	unsigned int result = 0;
+	VkPhysicalDeviceProperties deviceProp{};
+	VkPhysicalDeviceFeatures deviceFeatures{};
+	vkGetPhysicalDeviceProperties(device, &deviceProp);
+	vkGetPhysicalDeviceFeatures(device, &deviceFeatures);
+
+	if (deviceProp.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU)
+	{
+		result +=1000;
+	}else
+	{
+		result +=10;
+	}
+	result += deviceProp.limits.maxImageDimension2D;
+	if(deviceFeatures.geometryShader)
+	{
+		return 0;
+	}
+	return result;
 }
 
 QueueFamilyIndices WindowApp::findQueueFamily(VkPhysicalDevice device)
@@ -486,9 +506,11 @@ void WindowApp::createSurface()
 	}
 }
 
-SwapChainSupportDetails WindowApp::querySwapChainSupport(VkPhysicalDevice device)
+
+VulkanEngine::SwapChainSupportDetails
+WindowApp::querySwapChainSupport(VkPhysicalDevice device)
 {
-	SwapChainSupportDetails details;
+	VulkanEngine::SwapChainSupportDetails details;
 	
 	uint32_t formatCount;
 	
@@ -561,9 +583,10 @@ VkExtent2D WindowApp::chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilit
 	}
 }
 
-void WindowApp::createSwapChain()
+void
+WindowApp::createSwapChain()
 {
-	SwapChainSupportDetails swapchainSup = querySwapChainSupport(mPhysicalDevice);
+	VulkanEngine::SwapChainSupportDetails swapchainSup = querySwapChainSupport(mPhysicalDevice);
 
 	VkSurfaceFormatKHR surfaceformat = chooseSwapSurfaceFormat(swapchainSup.formats);
 	VkPresentModeKHR presentMode = choosePresentMode(swapchainSup.presentMode);

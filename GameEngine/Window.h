@@ -15,6 +15,8 @@
 #include <optional>
 #include <set>
 
+#include "VulkanCore/VulkanDevice.h"
+
 struct UniformBufferObject {
 	alignas(16) glm::mat4 model;
 	alignas(16) glm::mat4 view;
@@ -40,16 +42,11 @@ struct QueueFamilyIndices
 	bool isTransfereFamily() { return transfereFamily.has_value(); }
 
 };
-struct SwapChainSupportDetails
-{
-	VkSurfaceCapabilitiesKHR capabilities;
-	std::vector<VkSurfaceFormatKHR> formats;
-	std::vector<VkPresentModeKHR> presentMode;
 
-};
 
 class WindowApp 
 {
+
 private:
 
 
@@ -145,7 +142,7 @@ private:
 	void createSurface();
 
 	//swapChain
-	SwapChainSupportDetails querySwapChainSupport(VkPhysicalDevice device);
+	VulkanEngine::SwapChainSupportDetails querySwapChainSupport(VkPhysicalDevice device);
 	VkSurfaceFormatKHR chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats);
 	VkPresentModeKHR choosePresentMode(const std::vector<VkPresentModeKHR> &availablePresentModes);
 	VkExtent2D chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities);

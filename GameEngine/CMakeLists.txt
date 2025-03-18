@@ -4,7 +4,12 @@
 # Add source to this project's executable.
 
 
-add_executable (GameEngine "main.cpp"  "Window.h" "Window.cpp"   "Vertex.h")
+add_executable (GameEngine "main.cpp"  "Window.h" "Window.cpp"   "Vertex.h"
+        VulkanCore/VulkanDevice.cpp
+        VulkanCore/VulkanDevice.h
+        VulkanCore/VulkanRenderer.cpp
+        VulkanCore/VulkanRenderer.h
+)
 
 add_compile_definitions(PROJECT_DIR="${CMAKE_CURRENT_SOURCE_DIR}")
 
@@ -23,3 +28,9 @@ set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 add_subdirectory(Libs/glfw)
 target_link_libraries(GameEngine glfw)
+
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+  add_compile_definitions(DEBUG_BUILD)
+else()
+  add_compile_definitions(RELEASE_BUILD)
+endif()
