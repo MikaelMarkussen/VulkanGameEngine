@@ -3,31 +3,41 @@
 #
 # Add source to this project's executable.
 
+project(GameEngine CXX)
 
-add_executable (GameEngine "main.cpp"  "Window.h" "Window.cpp"   "Vertex.h"
-        VulkanCore/VulkanDevice.cpp
-        VulkanCore/VulkanDevice.h
-        VulkanCore/VulkanRenderer.cpp
-        VulkanCore/VulkanRenderer.h
+add_executable (GameEngine 
+				"main.cpp"  
+				"Window.h" 
+				"Window.cpp"   
+				"Vertex.h"  
 )
+
+set_property(TARGET GameEngine PROPERTY CXX_STANDARD 20)
+set_property(TARGET GameEngine PROPERTY CXX_STANDARD_REQUIRED ON)
 
 add_compile_definitions(PROJECT_DIR="${CMAKE_CURRENT_SOURCE_DIR}")
 
-if (CMAKE_VERSION VERSION_GREATER 3.12)
-  set_property(TARGET GameEngine PROPERTY CXX_STANDARD 20)
-endif()
-
+target_compile_definitions(GameEngine PRIVATE 
+    PROJECT_DIR="${CMAKE_CURRENT_SOURCE_DIR}"
+    $<$<CONFIG:Debug>:DEBUG_BUILD>
+    $<$<CONFIG:Release>:RELEASE_BUILD>
+)
 
 find_package(Vulkan REQUIRED)
-target_link_libraries(${PROJECT_NAME} Vulkan::Vulkan)
-target_include_directories(${PROJECT_NAME} PUBLIC ${VULKAN_INCLUDE_DIRS})
+target_link_libraries(GameEngine PRIVATE Vulkan::Vulkan)
+
+add_subdirectory(Libs/EASTL)
+target_link_libraries(GameEngine PRIVATE EASTL)
+
+add_subdirectory(Libs/glfw)
+target_link_libraries(GameEngine PRIVATE glfw)
+
 
 
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
-add_subdirectory(Libs/glfw)
-target_link_libraries(GameEngine glfw)
+
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
   add_compile_definitions(DEBUG_BUILD)

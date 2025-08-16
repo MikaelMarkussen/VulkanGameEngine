@@ -3,6 +3,7 @@
 
 #include "Window.h"
 #include <filesystem>
+#include <EABase/eabase.h>
 int main()
 {
 #ifdef PROJECT_DIR

@@ -4,3 +4,9 @@
 [submodule "GameEngine/Libs/stb"]
 	path = GameEngine/Libs/stb
 	url = https://github.com/nothings/stb.git
+[submodule "GameEngine/Libs/EASTL"]
+	path = GameEngine/Libs/EASTL
+	url = git@github.com:electronicarts/EASTL.git
+[submodule "GameEngine/Libs/EABase"]
+	path = GameEngine/Libs/EABase
+	url = git@github.com:electronicarts/EABase.git
